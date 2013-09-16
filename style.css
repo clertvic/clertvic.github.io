@@ -124,6 +124,10 @@ h2, h3, h4, h5{
     font-size: 12px;
 }
 
+.center{
+    text-align: center;
+}
+
 
 /* ----- GLOBAL LOADING ARCHITECTURE ------ */
 
@@ -246,7 +250,7 @@ header nav > ul > li > a > span{
     -webkit-font-smoothing: antialiased;
 }
 
-body:not(.touch) header > h1 > a > span,
+/*body:not(.touch) header > h1 > a > span,*/
 body:not(.touch) header nav > ul > li > a > span{
     -webkit-transition: all 150ms ease-in-out;
     -moz-transition: all 150ms ease-in-out;
@@ -267,32 +271,32 @@ header h1 span{
     /*color: #000;*/
 }
 
-header > h1 > a > span,
-header.fixed.dark .pri > li > a > span,
-header.fixed.dark > h1 > a > span{
+header > h1 > span,
+header.fixed.dark > h1 > span,
+header.fixed.dark .pri > li > a > span {
     color: #fff;
 }
 
-header > h1 > a > span:hover,
-header > h1.current-menu-item > a > span,
+/*header > h1 > a > span:hover,
+header > h1.current-menu-item > a > span,*/
 header .pri > li > a > span:hover,
 header .pri > li.current-menu-item > a > span,
 #projects .work span,
 .dark.fixed #projects .work span,
-header.fixed.dark > h1 > a > span:hover,
-header.fixed.dark > h1.current-menu-item > a > span,
+/*header.fixed.dark > h1 > a > span:hover,
+header.fixed.dark > h1.current-menu-item > a > span,*/
 header.fixed.dark .pri > li > a > span:hover,
 header.fixed.dark .pri > li.current-menu-item > a > span{
     color: rgba(255,255,255,0.6);
 }
 
-header.dark > h1 > a > span,
+header.dark > h1 > span,
 header.dark .pri > li > a > span{
     color: #000;
 }
 
-header.dark > h1 > a > span:hover,
-header.dark > h1.current-menu-item > a > span,
+/*header.dark > h1 > a > span:hover,
+header.dark > h1.current-menu-item > a > span,*/
 header.dark .pri > li > a > span:hover,
 header.dark .pri > li.current-menu-item > a > span{
     color: #0077b5;
