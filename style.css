@@ -166,6 +166,14 @@ h2, h3, h4, h5{
 
 /* ------ GLOBAL CSS3 TRANSITIONS ----- */
 
+.anim250{
+    -webkit-transition: all 250ms ease-in-out;
+    -moz-transition: all 250ms ease-in-out;
+    -ms-transition: all 250ms ease-in-out;
+    -o-transition: all 250ms ease-in-out;	
+    transition: all 250ms ease-in-out;
+}
+
 .anim350{
     -webkit-transition: all 350ms ease-in-out;
     -moz-transition: all 350ms ease-in-out;
@@ -315,7 +323,7 @@ header.dark .pri > li.current-menu-item > a > span{
 .cover.work{
     position: relative;
     min-height: 196px;
-    height: 525px;
+    /*height: 525px;*/
 }
 
 .cover h2{
@@ -358,7 +366,7 @@ div.slide{
 
 #WorkGrid{
     background: #fff;
-    padding: 30px 200px 0 200px;
+    padding: 50px 200px;
     text-align: justify;
     overflow: hidden;
     position: relative;
@@ -373,55 +381,63 @@ div.slide{
     vertical-align: top;
 }
 
-#WorkGrid .mix .upper{
-    background: #f9f9f9;
-    padding-top: 70%;
+#WorkGrid .mix:hover .description{ 
     opacity: 1;
-    overflow: hidden;   
-    position: relative;
 }
 
-#WorkGrid .mix .upper .img_wrapper{
+#WorkGrid .mix:hover .overlay{
+    opacity: 1;
+}
+
+#WorkGrid .mix img{
+    width: 100%;
+    height: auto;
+}
+
+#WorkGrid .mix .description{
     position: absolute;
+    opacity: 0;
+    top: 0;    
+    color: #fff;
+    padding: 20px 20px; 
+    z-index: 10;
+}
+
+#WorkGrid .mix .overlay{
+    position: absolute;
+    opacity: 0;
+    background: #363636;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
+    z-index: 9; 
 }
 
-body #WorkGrid .mix .img_wrapper{
-    /*	-webkit-filter: grayscale(90%);
-            -moz-filter: grayscale(90%);
-            -ms-filter: grayscale(90%);
-            filter: grayscale(90%);*/
+#WorkGrid .mix .title{
+    display: inline-block;
+    font-size: 18px;
+/*    text-transform: uppercase;
+    letter-spacing: 1px;*/
+    font-weight: 600;
+    color: #fff;
+    margin: 0 12px 0 0;
+    padding-bottom: 15px;	
+    line-height: 1.5;
 }
 
-body #WorkGrid .mix:hover .img_wrapper{
-    /*	-webkit-filter: grayscale(0%);
-            -moz-filter: grayscale(0%);
-            -ms-filter: grayscale(0%);
-            filter: grayscale(0%);
-            -webkit-transform: translateZ(0);*/
-}
-
-body.safari:not(.touch) #WorkGrid .mix:hover .img_wrapper{
-    opacity: .6;
+#WorkGrid .mix .description p{    
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+    color: #0CC4F9;
 }
 
 #WorkGrid .mix h3{
     margin-top: 18px;
-
     text-transform: none;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0;
     line-height: 1.5;
-}
-
-#WorkGrid .mix .lower{
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
 }
 
 #WorkGrid .filler{
@@ -587,4 +603,24 @@ body.safari:not(.touch) #WorkGrid .mix:hover .img_wrapper{
     display: block;
     text-align: center;
     margin: 70px auto 30px auto;
+}
+
+
+/* ------ FOOTER ------ */
+
+footer .hr{
+    display: block;
+    height: 1px;
+    background: #e6e6e6;
+    margin: 0 0 20px 0;
+    padding: 0;
+    border: 0;
+}
+
+footer .copyright{
+    line-height: 1.8em;
+    font-size: 13px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    text-align: center;
 }
