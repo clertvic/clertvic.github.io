@@ -394,15 +394,6 @@ div.slide{
     height: auto;
 }
 
-#WorkGrid .mix .description{
-    position: absolute;
-    opacity: 0;
-    top: 0;    
-    color: #fff;
-    padding: 20px 20px; 
-    z-index: 10;
-}
-
 #WorkGrid .mix .overlay{
     position: absolute;
     opacity: 0;
@@ -412,23 +403,38 @@ div.slide{
     z-index: 9; 
 }
 
-#WorkGrid .mix .title{
-    display: inline-block;
+#WorkGrid .mix .description{
+    position: absolute;
+    opacity: 0;
+    top: 0;    
+    color: #fff;
+    padding: 20px 20px; 
+    z-index: 10;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+}
+
+#WorkGrid .mix .description .title{
     font-size: 18px;
 /*    text-transform: uppercase;
     letter-spacing: 1px;*/
     font-weight: 600;
-    color: #fff;
-    margin: 0 12px 0 0;
-    padding-bottom: 15px;	
-    line-height: 1.5;
+    color: #e6e6e6;
+/*     margin: 0 12px 0 0; */
+/*     padding-bottom: 15px;	 */
+    line-height: 1.7;
 }
 
-#WorkGrid .mix .description p{    
-    font-size: 14px;
-    font-weight: 400;
-    text-align: left;
+#WorkGrid .mix .description .type{    
     color: #0CC4F9;
+    margin-right: 4px;
+}
+
+#WorkGrid .mix .description p{
+	margin: 22px 0 18px 0;
+    color: #e6e6e6;
+    line-height: 1.7;
 }
 
 #WorkGrid .mix h3{
