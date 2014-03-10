@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=1">
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
+        <link href="css/redmond/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="css/parks.css">
+
+        <!--<meta name="viewport" content="width=device-width,initial-scale=1" />-->
+        <link type="text/css" rel="stylesheet" href="css/normalize.css" />
+        <link type="text/css" rel="stylesheet" href="css/prettify.css" />
+        <link type="text/css" rel="stylesheet" href="css/map-style.css" />
+
+        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.sortable.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="js/jquery.mixitup.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+        <script type="text/javascript" src="js/underscore.min.js"></script>
+        <script type="text/javascript" src="js/backbone.min.js"></script>
+        <script type="text/javascript" src="js/prettify.min.js"></script>
+        <script type="text/javascript" src="js/demo.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.map.js"></script>
+
+        <!--  
+
+        NATIONAL PARKS: A MIXITUP DEMO
+        
+        Concept and development by Patrick Kunka
+        Design by Jane Song
+        
+        MixItUp is free for non-commercial and commercial use.
+        Copyright 2013 Barrel LLC.
+        
+        http://mixitup.io
+        http://www.barrelny.com
+        
+        DEMO FEATURES
+        
+        - Switch between grid and list view using the 'toGrid' and 'toList' methods
+        - Use different stylings for grid and list views via the 'gridClass' and 'listClass' options
+        - Sort by name and by target using sort buttons
+        - Complex multi-dimensional checkbox filtering using the 'filter' method and custom click handlers
+        - Fade-in "fail element" when MixItUp's filters return no elements.
+        
+        We hope you find this demo useful and educational,
+        Enjoy!
+        
+        The MixItUp Team
+        
+        -->
+        <script>
+            ACCOUNTS_DB = [
+                {
+                    "ranking": "1",
+                    "practice": "St. Mary's Hospital",
+                    "address1": "133 Wood Ave",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "22",
+                    "num_prescribers": "6",
+                    "num_nurses": "3",
+                    "num_high": "2",
+                    "num_med": "2",
+                    "num_low": "2",
+                    "myrating": "3",
+                    "r13": "-88.2 %",
+                    "ptp": "5 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "2",
+                    "practice": "University of Texas M.D. Anderson Cancer Center",
+                    "address1": "203 Morewood",
+                    "address2": "Briarforest, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "56",
+                    "num_prescribers": "13",
+                    "num_nurses": "20",
+                    "num_high": "6",
+                    "num_med": "4",
+                    "num_low": "3",
+                    "myrating": "2",
+                    "r13": "-100 %",
+                    "ptp": "10 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "3",
+                    "practice": "Menninger Clinic",
+                    "address1": "1121 Utah Street, Suite 2301",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "12",
+                    "num_prescribers": "3",
+                    "num_nurses": "4",
+                    "num_high": "2",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "4",
+                    "r13": "4 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "4",
+                    "practice": "Crossroads Convalescent Home",
+                    "address1": "401 Van Buren Street",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "15",
+                    "num_prescribers": "3",
+                    "num_nurses": "5",
+                    "num_high": "1",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "2",
+                    "r13": "45 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "5",
+                    "practice": "Western Oncology",
+                    "address1": "7 Spring St",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "30",
+                    "num_prescribers": "2",
+                    "num_nurses": "4",
+                    "num_high": "2",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "5",
+                    "r13": "0 %",
+                    "ptp": "13 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "6",
+                    "practice": "St. Luke's Episcopal Hospital",
+                    "address1": "1506 Ridgewood Street 3 fl.",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "34",
+                    "num_prescribers": "3",
+                    "num_nurses": "7",
+                    "num_high": "1",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "14.3 %",
+                    "ptp": "10 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "7",
+                    "practice": "Milan Medical Center",
+                    "address1": "22 Newton John Street",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "8",
+                    "num_prescribers": "2",
+                    "num_nurses": "6",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "2",
+                    "myrating": "2",
+                    "r13": "-26.7 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "8",
+                    "practice": "Medical Clinic of Houston",
+                    "address1": "207 Magic Johnson Blvd.",
+                    "address2": "Briarforest, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "19",
+                    "num_prescribers": "8",
+                    "num_nurses": "12",
+                    "num_high": "1",
+                    "num_med": "5",
+                    "num_low": "2",
+                    "myrating": "2",
+                    "r13": "-62.5 %",
+                    "ptp": "8.5 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "9",
+                    "practice": "M.D. Angela Del Rosario",
+                    "address1": "3 Ave. of Two Rivers",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "25",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "5",
+                    "r13": "-100 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "10",
+                    "practice": "Fitzgerald & Associates",
+                    "address1": "237 N. Dithridge Ave.",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "27",
+                    "num_prescribers": "2",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "50 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "11",
+                    "practice": "Hematology Oncology Associates",
+                    "address1": "300 S. Craig Street, 4 floor",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "48",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "2",
+                    "r13": "-14 %",
+                    "ptp": "0 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "12",
+                    "practice": "Hematology Oncology Associates",
+                    "address1": "925 Gessner Road, Suite 306",
+                    "address2": "Houston TX",
+                    "zipcode": "77024",
+                    "drivingtime": "52",
+                    "num_prescribers": "2",
+                    "num_nurses": "2",
+                    "num_high": "1",
+                    "num_med": "1",
+                    "num_low": "0",
+                    "myrating": "4",
+                    "r13": "17.5 %",
+                    "ptp": "0 %",
+                    "reptracx" : "Yes"
+                },
+                {
+                    "ranking": "13",
+                    "practice": "First City Hospital",
+                    "address1": "9800 Pocahontas Blvd",
+                    "address2": "Timbergrove, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "57",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "1",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "0 %",
+                    "ptp": "20 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "14",
+                    "practice": "Texas Oncology",
+                    "address1": "6200 Fifth Avenue, Suite 116",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "27",
+                    "num_prescribers": "2",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "4",
+                    "r13": "-20 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "15",
+                    "practice": "M.D. Lawrence Foote",
+                    "address1": "345 Magic Pl",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "29",
+                    "num_prescribers": "1",
+                    "num_nurses": "2",
+                    "num_high": "0",
+                    "num_med": "1",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "0 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "16",
+                    "practice": "St. Clara Hospital",
+                    "address1": "1234 Elm Street",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "45",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "4",
+                    "r13": "12.5 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "17",
+                    "practice": "M.D. John Sherwood",
+                    "address1": "216 Melwood Ave.",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "68",
+                    "num_prescribers": "1",
+                    "num_nurses": "3",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "0 %",
+                    "ptp": "11.5 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "18",
+                    "practice": "Dr. Amy A Hassan",
+                    "address1": "125 Forth Ave",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "72",
+                    "num_prescribers": "1",
+                    "num_nurses": "3",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "5",
+                    "r13": "-100 %",
+                    "ptp": "4 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "19",
+                    "practice": "M.D. Reeves Oncology",
+                    "address1": "6028 Cruse Road",
+                    "address2": "Greenspoint, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "75",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "4",
+                    "r13": "-57.1 %",
+                    "ptp": "2 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "20",
+                    "practice": "Dr. Barry S Siller",
+                    "address1": "27 Spring Street",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "88",
+                    "num_prescribers": "1",
+                    "num_nurses": "1",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "2",
+                    "r13": "-100 %",
+                    "ptp": "0 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "21",
+                    "practice": "Pulmonary Critical Care",
+                    "address1": "607 Tiny Ave",
+                    "address2": "Briarforest, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "91",
+                    "num_prescribers": "1",
+                    "num_nurses": "5",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "-27.3 %",
+                    "ptp": "6 %",
+                    "reptracx": "No"
+                }
+            ];
+
+            ACCOUNTS_COORDS = [];
+            for(i=0; i< ACCOUNTS_DB.length; i++){
+                ACCOUNTS_COORDS.push([29.5 + Math.random(), -95.5 + Math.random()]);
+            }		
+            $(function() { 
+                demo.add(function() {			
+                    $('#map_canvas').gmap({'disableDefaultUI':true, 'center': '42.345573,-71.098326'}).bind('init', function(evt, map) {
+                        var tags = ['High', 'Medium', 'Low', '★', '★★', '★★★', '★★★★', '★★★★★'];
+                        
+                        for (i = 0; i < ACCOUNTS_DB.length; i++) {
+                            var current_record = ACCOUNTS_DB[i];
+                            var temp_filters = [];
+                            if(current_record.num_high > 0){
+                                temp_filters.push("High");
+                            }
+                            if(current_record.num_med > 0){
+                                temp_filters.push("Medium");
+                            }
+                            if(current_record.num_low > 0){
+                                temp_filters.push("Low");
+                            }
+                            if(current_record.myrating == 1){
+                                temp_filters.push("★");
+                            }
+                            else if(current_record.myrating == 2){
+                                temp_filters.push("★★");
+                            }
+                            else if(current_record.myrating == 3){
+                                temp_filters.push("★★★");
+                            }
+                            else if(current_record.myrating == 4){
+                                temp_filters.push("★★★★");
+                            }
+                            else if(current_record.myrating == 5){
+                                temp_filters.push("★★★★★");
+                            }
+                            
+                            var rate_str = "";
+                            for(var j=0; j<current_record.myrating; j++){
+                                rate_str += "★";
+                            }
+                            if(current_record.myrating == 0){
+                                rate_str = "-";
+                            }
+                            //						                    "practice": "Pulmonary Critical Care",
+                            //                    "address1": "607 Tiny Ave",
+                            //                    "address2": "Briarforest, TX",
+                            //                    "zipcode": "77002",
+                            //                    "drivingtime": "91",
+                            //                    "num_prescribers": "1",
+                            //                    "num_nurses": "5",
+                            //                    "num_high": "1",
+                            //                    "num_med": "0",
+                            //                    "num_low": "0",
+                            //                    "myrating": "3",
+                            //                    "r13": "-27.3 %",
+                            //                    "ptp": "6 %",
+                            //                    "reptracx": "No"	
+                            temp_filters.push(current_record.my_rating);
+                            $('#map_canvas').gmap('addMarker', {
+                                'practice': current_record.practice,
+                                'address1': current_record.address1,
+                                'address2': current_record.address2,
+                                'zipcode': current_record.zipcode,
+                                'tel': '(713) 792-2121',
+                                'drivingtime': current_record.drivingtime,
+                                'num_prescribers': current_record.num_prescribers,
+                                'num_nurses': current_record.num_nurses,
+                                'num_high': current_record.num_high,
+                                'num_med': current_record.num_med,
+                                'num_low': current_record.num_low,
+                                'r13': current_record.r13,
+                                'ptp': current_record.ptp,
+                                'myrating': rate_str,
+                                //'icon': { image: "https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=" + (i+1) + "|FFFFFF|000000", iconsize: [26, 46]},
+                                //'icon': "https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.5|0|3ba4ff|13|_|" + (i+1),// + (i+1) + "|3ba4ff|ffffff",
+                                'icon': { url: 'image/marker/' + (i+1) + '.png', scaledSize: new google.maps.Size(25, 34)},
+                                'tags': temp_filters, 
+                                'bound':true, 
+                                'position': new google.maps.LatLng(ACCOUNTS_COORDS[i][0], ACCOUNTS_COORDS[i][1]) }).click( function() { 
+                                //                                $('#map_canvas').gmap('openInfoWindow', { 
+                                //                                    'content': '<div style="font-weight: 700; font-size: 16px; color: #3ba4ff">' + $(this)[0].practice + '</div>'
+                                //                                        + '<div style="font-size: 14px">' + $(this)[0].address1 + '<br/>' + $(this)[0].address2 + '<br/>' + $(this)[0].tel + '</div>'
+                                //                                        + '<br/>'
+                                //                                        + '<div style="font-size: 14px; width: 200px">'
+                                //                                        + '<div style="width: 50%; float: left">'
+                                //                                        + '<div style="font-weight: 600">DRIVE</div>'
+                                //                                        + '<div style="padding-left: 10px; padding-bottom: 5px">' + $(this)[0].drivingtime + ' mins'
+                                //                                        + '</div>'
+                                //                                        + '<div style="font-weight: 600">HCPs</div>'
+                                //                                        + '<div style="padding-left: 10px; padding-bottom: 5px"><b>' + $(this)[0].num_prescribers + ' </b>Prescribers<br/>' + $(this)[0].num_nurses + ' Nurses'
+                                //                                        + '</div>'
+                                //                                        + '<div style="font-weight: 600">TARGET</div>'
+                                //                                        + '<div style="padding-left: 10px">'+ $(this)[0].num_high + ' High<br/>' + $(this)[0].num_med + ' Medium<br/>' + $(this)[0].num_low + ' Low'
+                                //                                        + '</div>'
+                                //                                        + '</div>'
+                                //                                        + '<div style="width: 50%; float: left">'
+                                //                                        + '<div style="font-weight: 600">PTP</div>'
+                                //                                        + '<div style="padding-left: 10px; padding-bottom: 5px">' + $(this)[0].ptp
+                                //                                        + '</div>'
+                                //                                        + '<div style="font-weight: 600">R13</div>'
+                                //                                        + '<div style="padding-left: 10px; padding-bottom: 5px">' + $(this)[0].r13
+                                //                                        + '</div>'
+                                //                                        + '<div style="font-weight: 600">MY RATING</div>'
+                                //                                        + '<div style="padding-left: 10px">' + $(this)[0].myrating
+                                //                                        + '</div>'
+                                //                                        + '</div>'
+                                //                                },
+                                $('#map_canvas').gmap('openInfoWindow', { 
+                                    'content': '<div style="font-weight: 700; font-size: 16px; color: #3ba4ff">' + $(this)[0].practice + '</div>'
+                                        + '<div style="font-size: 14px">' + $(this)[0].address1 + '<br/>' + $(this)[0].address2 + '<br/>' + $(this)[0].tel + '</div>'
+                                        + '<br/>'
+                                        + '<div style="font-size: 14px">'
+                                        + '<div style="padding-right: 20px; float: left">'
+                                        + '<div style="font-weight: 600">DRIVE</div>'
+                                        + $(this)[0].drivingtime + ' mins'
+                                        + '</div>'
+                                        + '<div style="padding-right: 20px; float: left">'
+                                        + '<div style="font-weight: 600">HCPs</div>'
+                                        + '<b>' + $(this)[0].num_prescribers + ' </b>Prescribers<br/>' + $(this)[0].num_nurses + ' Nurses'
+                                        + '</div>'
+                                        + '<div style="padding-right: 20px; float: left">'
+                                        + '<div style="font-weight: 600">TARGET</div>'
+                                        + $(this)[0].num_high + ' High<br/>' + $(this)[0].num_med + ' Medium<br/>' + $(this)[0].num_low + ' Low'
+                                        + '</div>'
+                                        + '<div style="padding-right: 20px; float: left">'
+                                        + '<div style="font-weight: 600">PTP</div>'
+                                        + $(this)[0].ptp
+                                        + '</div>'
+                                        + '<div style="padding-right: 20px; float: left">'
+                                        + '<div style="font-weight: 600">R13</div>'
+                                        + $(this)[0].r13
+                                        + '</div>'
+                                        + '<div style="float: left">'
+                                        + '<div style="font-weight: 600">MY RATING</div>'
+                                        + $(this)[0].myrating
+                                        + '</div>'
+                                        + '</div>'
+                                },
+                                this);
+                            });
+                        }
+                        
+                        $.each($('#map_canvas').gmap('get', 'markers'), function(i, marker) {
+                            $('#map_canvas').gmap('addBounds', marker.position);
+                            marker.setVisible(true);
+                            console.info(marker);//.size = new google.maps.Size(20, 20);
+                        });
+                            
+                        //                        $('input:checkbox').click(function() {
+                        //                            $('#map_canvas').gmap('closeInfoWindow');
+                        //                            $('#map_canvas').gmap('set', 'bounds', null);
+                        //                            var filters = [];
+                        //                            $('input:checkbox:checked').each(function(i, checkbox) {
+                        //                                filters.push($(checkbox).val());
+                        //                            });
+                        //                            console.info(filters);
+                        //                            if ( filters.length > 0 ) {
+                        //                                $('#map_canvas').gmap('find', 'markers', { 'property': 'tags', 'value': filters, 'operator': 'OR' }, function(marker, found) {
+                        //                                    if (found) {
+                        //                                        $('#map_canvas').gmap('addBounds', marker.position);
+                        //                                    }
+                        //                                    marker.setVisible(found); 
+                        //                                });
+                        //                            } else {
+                        //                                $.each($('#map_canvas').gmap('get', 'markers'), function(i, marker) {
+                        //                                    $('#map_canvas').gmap('addBounds', marker.position);
+                        //                                    marker.setVisible(true); 
+                        //                                });
+                        //                            }
+                        //                        });
+                    });
+                }).load();
+            });
+        </script>
+        <script type="text/javascript">
+            //            function getCircle(magnitude) {
+            //                return {
+            //                    path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
+            //                    fillColor: 'red',
+            //                    fillOpacity: .2,
+            //                    scale: Math.pow(2, magnitude) / Math.PI,
+            //                    strokeColor: 'white',
+            //                    strokeWeight: .5
+            //                };
+            //            }
+            function cleanArray(actual){
+                var newArray = new Array();
+                for(var i = 0; i<actual.length; i++){
+                    if (actual[i]){
+                        newArray.push(actual[i]);
+                    }
+                }
+                console.info('newArray: ', newArray);
+                return newArray;
+            }
+            
+            $(function(){
+				
+                // INSTANTIATE MIXITUP
+                $('#Parks').mixitup({
+                    layoutMode: 'list', // Start in list mode (display: block) by default
+                    listClass: 'list', // Container class for when in list mode
+                    gridClass: 'grid', // Container class for when in grid mode
+                    effects: ['fade','blur'], // List of effects 
+                    listEffects: ['fade','rotateX'], // List of effects ONLY for list mode
+                    onMixStart: function(){
+                        $('.details').removeClass('active');                        
+                        $('div.prescriber_list_header').remove();
+                        $('li.prescriber').remove();
+                    },
+                    onMixEnd: function(){                        
+                        var lis = [];
+                        $('li.mix_all').each(function() {
+                            if ($(this).css('opacity') == '1') {
+                                lis.push(this);
+                            }
+                        }); 
+                        
+                        $('div.result').text(lis.length + ' Accounts');
+                    }
+                });
+				
+                // HANDLE MULTI-DIMENSIONAL CHECKBOX FILTERING
+                /* 	
+                 *	The desired behaviour of multi-dimensional filtering can differ greatly 
+                 *	from project to project. MixItUp's built in filter button handlers are best
+                 *	suited to simple filter operations, so we will need to build our own handlers
+                 *	for this demo to achieve the precise behaviour we need.
+                 */
+				
+                var $filters = $('#Filters').find('li'),
+                dimensions = {
+                    target: 'all', // Create string for first dimension
+                    myrating: 'all'
+                };
+		
+                // Bind checkbox click handlers:
+                $filters.on('click',function(){
+                    $('#map_canvas').gmap('closeInfoWindow');
+                    $('#map_canvas').gmap('set', 'bounds', null);
+                    
+                    var $t = $(this),
+                    dimension = $t.attr('data-dimension'),
+                    filter = $t.attr('data-filter'),
+                    filterString = dimensions[dimension];
+                    
+                    if(filter == 'all'){
+                        // If "all"
+                        if(!$t.hasClass('active')){
+                            // if unchecked, check "all" and uncheck all other active filters
+                            $t.addClass('active').siblings().removeClass('active');
+                            // Replace entire string with "all"
+                            filterString = 'all';	
+                        } else {
+                            // Uncheck
+                            $t.removeClass('active');
+                            // Emtpy string
+                            filterString = '';
+                        }
+                    } else {
+                        // Else, uncheck "all"
+                        $t.siblings('[data-filter="all"]').removeClass('active');
+                        // Remove "all" from string
+                        filterString = filterString.replace('all','');
+                        
+                        if(!$t.hasClass('active')){
+                            // Check checkbox
+                            $t.addClass('active');
+                            // Append filter to string
+                            filterString = filterString == '' ? filter : filterString+' '+filter;
+                        } else {
+                            // Uncheck
+                            $t.removeClass('active');
+                            // Remove filter and preceeding space from string with RegEx
+                            var re = new RegExp('(\\s|^)'+filter);
+                            filterString = filterString.replace(re,'');
+                        };
+                    };
+                    
+                    // Set demension with filterString
+                    dimensions[dimension] = filterString;
+                    
+                                
+                    // We now have two strings containing the filter arguments for each dimension:	
+                    console.info('dimension 1: '+dimensions.target);
+                    console.info('dimension 2: '+dimensions.myrating);
+                    
+                    var temp_filters = dimensions.target.replace('all', 'High Medium Low');
+                    temp_filters = temp_filters + ' ' + dimensions.myrating.replace('all', '★ ★★ ★★★ ★★★★ ★★★★★');
+                    temp_filters = temp_filters.replace('1star', '★');
+                    temp_filters = temp_filters.replace('2star', '★★');
+                    temp_filters = temp_filters.replace('3star', '★★★');
+                    temp_filters = temp_filters.replace('4star', '★★★★');
+                    temp_filters = temp_filters.replace('5star', '★★★★★');
+                    
+                    var filters = temp_filters.split(' ');
+                    filters = cleanArray(filters);
+                    
+                    //                    console.info('temp filters: ' + temp_filters);
+                    //                    console.info('filters: ' + filters);
+                        
+                    var accounts = 0;
+                    if ( filters.length > 0 ) {
+                        $('#map_canvas').gmap('find', 'markers', { 'property': 'tags', 'value': filters, 'operator': 'OR' }, function(marker, found) {
+                            if (found) {
+                                $('#map_canvas').gmap('addBounds', marker.position);
+                                accounts = accounts + 1;
+                            }
+                            marker.setVisible(found);
+                        });
+                    } else {
+                        $.each($('#map_canvas').gmap('get', 'markers'), function(i, marker) {
+                            $('#map_canvas').gmap('addBounds', marker.position);
+                            marker.setVisible(false); 
+                        });
+                    }
+                    
+                    $('div.result').text(accounts + ' Accounts');
+                });
+                
+                $('.button.refresh').on('click', function(){
+                    location.reload(true); 
+                });
+                
+                $("#glossary_modal").dialog({
+                    autoOpen: false,
+                    height: 540,
+                    width: 730,
+                    modal: true
+                });
+        
+                $('.glossary').on('click', function(){
+                    $("#glossary_modal").html('<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>PTP</td><td>Sales PTP</td></tr></tbody></table>');
+                    
+                    $("#glossary_modal").dialog("open");
+                });
+            });
+        </script>
+
+        <title>Genee - Get Account Suggestions</title>
+        <style type="text/css"></style></head>
+    <body>
+        <section>
+
+            <!-- BEGIN DEMO WRAPPER -->
+
+            <div class="wrapper wf">
+
+                <!-- BEGIN HEADER -->
+
+                <header>
+                    <div class="group">
+                        <a href="index.html">
+                            <div class="back">
+                                <div class="img_wrapper loaded previous">
+                                    <img src="image/previous.png">
+                                </div>Main Menu
+                            </div>
+                        </a>
+                        <a href="listview.html">
+                            <div class="button listview" id="ToList">
+                                <div class="img_wrapper loaded listview">
+                                    <img src="image/listview.png">
+                                </div>
+                                Table View
+                            </div>
+                        </a>
+                        <div class="button mapview active" id="ToGrid">
+                            <div class="img_wrapper loaded mapview">
+                                <img src="image/mapview_active.png">
+                            </div>
+                            Map View
+                        </div>
+                        <a href="#">
+                            <div class="glossary">
+                                Glossary
+                            </div>
+                        </a>
+
+                    </div>
+                </header>
+
+                <!-- END HEADER -->
+
+                <!-- BEGIN CONTROLS -->
+
+                <nav class="controls just">
+                    <div class="result">21 Accounts</div>
+                    <div class="group" id="Filters">
+                        <div class="drop_down wf">
+                            <span class="anim150">Drug</span>
+                            <ul class="anim250">
+                                <li class="active">Avastin</li>
+                                <li>Herceptin</li>
+                            </ul>
+                        </div>
+                        <div class="drop_down wf">
+                            <span class="anim150">Target</span>
+                            <ul class="anim250">
+                                <li class="active" data-filter="all" data-dimension="target">All</li>
+                                <li data-filter="High" data-dimension="target">High</li>
+                                <li data-filter="Medium" data-dimension="target">Medium</li>
+                                <li data-filter="Low" data-dimension="target">Low</li>
+                            </ul>
+                        </div>
+                        <div class="drop_down wf">
+                            <span class="anim150">My Rating</span>
+                            <ul class="anim250">
+                                <li class="active" data-filter="all" data-dimension="myrating">All</li>
+                                <li data-filter="1star" data-dimension="myrating">★</li>
+                                <li data-filter="2star" data-dimension="myrating">★★</li>
+                                <li data-filter="3star" data-dimension="myrating">★★★</li>
+                                <li data-filter="4star" data-dimension="myrating">★★★★</li>
+                                <li data-filter="5star" data-dimension="myrating">★★★★★</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="button refresh">Refresh</div>
+                </nav>
+                <div class="container_16">
+                    <article class="grid_16">
+                        <div class="item">
+                            <div id="map_canvas" class="map"></div>
+                        </div>
+                    </article>
+                </div>
+                <!-- END CONTROLS -->
+            </div>
+
+            <!-- END DEMO WRAPPER -->
+
+        </section>
+
+        <div id="glossary_modal" title="Glossary">
+
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <!--Powered by <strong>MixItUp</strong>, a <a href="http://mixitup.io/demos/parks#">Barrel Tool</a>-->
+        <!-- END FOOTER -->
+
+    </body>
+</html>

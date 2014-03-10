@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=1">
+
+		<link rel="stylesheet" type="text/css" href="css/parks.css">
+		
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.sortable.min.js"></script>
+		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mixitup.min.js"></script>
+		
+		<!--  
+
+		NATIONAL PARKS: A MIXITUP DEMO
+		
+		Concept and development by Patrick Kunka
+		Design by Jane Song
+		
+		MixItUp is free for non-commercial and commercial use.
+		Copyright 2013 Barrel LLC.
+		
+		http://mixitup.io
+		http://www.barrelny.com
+		
+		DEMO FEATURES
+		
+		- Switch between grid and list view using the 'toGrid' and 'toList' methods
+		- Use different stylings for grid and list views via the 'gridClass' and 'listClass' options
+		- Sort by name and by target using sort buttons
+		- Complex multi-dimensional checkbox filtering using the 'filter' method and custom click handlers
+		- Fade-in "fail element" when MixItUp's filters return no elements.
+		
+		We hope you find this demo useful and educational,
+		Enjoy!
+		
+		The MixItUp Team
+		
+		-->
+		<script>
+ACCOUNTS_DB = [
+	{
+		"ranking": "1",
+		"practice": "Western Oncology",
+		"address": "7 Spring St, Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "30",
+		"num_prescribers": "2",
+		"num_nurses": "4",
+		"num_high": "2",
+		"num_med": "0",
+		"num_low": "0",
+		"myrating": "5",
+		"r13": "0",
+		"ptp": "0.13",
+		"reptracx": "Yes"
+	},
+	{
+		"ranking": "2",
+		"practice": "St. Mary's Hospital",
+		"address": "133 Wood Ave, Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "22",
+		"num_prescribers": "6",
+		"num_nurses": "3",
+		"num_high": "2",
+		"num_med": "2",
+		"num_low": "2",
+		"myrating": "1",
+		"r13": "-0.882",
+		"ptp": "0.05",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "3",
+		"practice": "M.D. Reeves Oncology",
+		"address": "Greenspoint, TX",
+		"zipcode": "77002",
+		"drivingtime": "75",
+		"num_prescribers": "1",
+		"num_nurses": "4",
+		"num_high": "0",
+		"num_med": "0",
+		"num_low": "1",
+		"myrating": "2",
+		"r13": "-0.571",
+		"ptp": "0.02",
+		"reptracx": "Yes"
+	},
+	{
+		"ranking": "4",
+		"practice": "St. Luke's Episcopal Hospital",
+		"address": "Gulfton, TX",
+		"zipcode": "77002",
+		"drivingtime": "34",
+		"num_prescribers": "3",
+		"num_nurses": "7",
+		"num_high": "1",
+		"num_med": "2",
+		"num_low": "0",
+		"myrating": "1",
+		"r13": "0.143",
+		"ptp": "0.1",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "5",
+		"practice": "Menninger Clinic",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "12",
+		"num_prescribers": "3",
+		"num_nurses": "4",
+		"num_high": "2",
+		"num_med": "0",
+		"num_low": "1",
+		"myrating": "3",
+		"r13": "0.04",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "6",
+		"practice": "Hematology Oncology Associates",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "48",
+		"num_prescribers": "1",
+		"num_nurses": "4",
+		"num_high": "0",
+		"num_med": "0",
+		"num_low": "1",
+		"myrating": "1",
+		"r13": "-0.14",
+		"ptp": "0",
+		"reptracx": "Yes"
+	},
+	{
+		"ranking": "7",
+		"practice": "University of Texas M.D. Anderson Cancer Center",
+		"address": "Briarforest, TX",
+		"zipcode": "77002",
+		"drivingtime": "56",
+		"num_prescribers": "13",
+		"num_nurses": "20",
+		"num_high": "6",
+		"num_med": "4",
+		"num_low": "3",
+		"myrating": "3",
+		"r13": "-1",
+		"ptp": "0.1",
+		"reptracx": "Yes"
+	},
+	{
+		"ranking": "8",
+		"practice": "Texas Oncology",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "27",
+		"num_prescribers": "2",
+		"num_nurses": "4",
+		"num_high": "0",
+		"num_med": "2",
+		"num_low": "0",
+		"myrating": "0",
+		"r13": "-0.2",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "9",
+		"practice": "M.D. John Sherwood",
+		"address": "Gulfton, TX",
+		"zipcode": "77002",
+		"drivingtime": "68",
+		"num_prescribers": "1",
+		"num_nurses": "3",
+		"num_high": "0",
+		"num_med": "0",
+		"num_low": "1",
+		"myrating": "2",
+		"r13": "0",
+		"ptp": "0.115",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "10",
+		"practice": "Fitzgerald & Associates",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "27",
+		"num_prescribers": "2",
+		"num_nurses": "4",
+		"num_high": "0",
+		"num_med": "0",
+		"num_low": "1",
+		"myrating": "3",
+		"r13": "0.5",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "11",
+		"practice": "Dr. Barry S Siller",
+		"address": "Gulfton, TX",
+		"zipcode": "77002",
+		"drivingtime": "88",
+		"num_prescribers": "1",
+		"num_nurses": "1",
+		"num_high": "1",
+		"num_med": "2",
+		"num_low": "0",
+		"myrating": "2",
+		"r13": "-1",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "12",
+		"practice": "M.D. Angela Del Rosario",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "25",
+		"num_prescribers": "1",
+		"num_nurses": "4",
+		"num_high": "1",
+		"num_med": "4",
+		"num_low": "1",
+		"myrating": "1",
+		"r13": "-1",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "13",
+		"practice": "Crossroads Convalescent Home",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "15",
+		"num_prescribers": "3",
+		"num_nurses": "5",
+		"num_high": "0",
+		"num_med": "0",
+		"num_low": "2",
+		"myrating": "3",
+		"r13": "0.45",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "14",
+		"practice": "Medical Clinic of Houston",
+		"address": "Briarforest, TX",
+		"zipcode": "77002",
+		"drivingtime": "19",
+		"num_prescribers": "8",
+		"num_nurses": "12",
+		"num_high": "0",
+		"num_med": "1",
+		"num_low": "0",
+		"myrating": "2",
+		"r13": "-0.625",
+		"ptp": "0.085",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "15",
+		"practice": "Milan Medical Center",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "8",
+		"num_prescribers": "2",
+		"num_nurses": "6",
+		"num_high": "0",
+		"num_med": "1",
+		"num_low": "0",
+		"myrating": "1",
+		"r13": "-0.267",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "16",
+		"practice": "First City Hospital",
+		"address": "Timbergrove, TX",
+		"zipcode": "77002",
+		"drivingtime": "57",
+		"num_prescribers": "1",
+		"num_nurses": "4",
+		"num_high": "1",
+		"num_med": "0",
+		"num_low": "0",
+		"myrating": "3",
+		"r13": "0",
+		"ptp": "0.2",
+		"reptracx": "Yes"
+	},
+	{
+		"ranking": "17",
+		"practice": "M.D. Lawrence Foote",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "29",
+		"num_prescribers": "1",
+		"num_nurses": "2",
+		"num_high": "0",
+		"num_med": "1",
+		"num_low": "0",
+		"myrating": "1",
+		"r13": "0",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "18",
+		"practice": "Pulmonary Critical Care",
+		"address": "Briarforest, TX",
+		"zipcode": "77002",
+		"drivingtime": "91",
+		"num_prescribers": "1",
+		"num_nurses": "5",
+		"num_high": "1",
+		"num_med": "0",
+		"num_low": "0",
+		"myrating": "3",
+		"r13": "-0.273",
+		"ptp": "0.06",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "19",
+		"practice": "St. Clara Hospital",
+		"address": "Gulfton, TX",
+		"zipcode": "77002",
+		"drivingtime": "45",
+		"num_prescribers": "1",
+		"num_nurses": "4",
+		"num_high": "1",
+		"num_med": "0",
+		"num_low": "0",
+		"myrating": "2",
+		"r13": "0.125",
+		"ptp": "0",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "20",
+		"practice": "Dr. Amy A Hassan",
+		"address": "Houston, TX",
+		"zipcode": "77002",
+		"drivingtime": "72",
+		"num_prescribers": "1",
+		"num_nurses": "3",
+		"num_high": "1",
+		"num_med": "0",
+		"num_low": "0",
+		"myrating": "1",
+		"r13": "-1",
+		"ptp": "0.04",
+		"reptracx": "No"
+	},
+	{
+		"ranking": "21",
+		"practice": "Hematology Oncology Associates",
+		"address": "925 Gessner Road, Houston TX",
+		"zipcode": "77024",
+		"drivingtime": "52",
+		"num_prescribers": "2",
+		"num_nurses": "2",
+		"num_high": "1",
+		"num_med": "1",
+		"num_low": "0",
+		"myrating": "2",
+		"r13": "0.175",
+		"ptp": "0",
+		"reptracx" : "Yes"
+	}
+];
+		</script>
+		<script type="text/javascript">
+			$(function(){
+				
+				// INSTANTIATE MIXITUP
+				$('#Parks').mixitup({
+					layoutMode: 'list', // Start in list mode (display: block) by default
+					listClass: 'list', // Container class for when in list mode
+					gridClass: 'grid', // Container class for when in grid mode
+					effects: ['fade','blur'], // List of effects 
+					listEffects: ['fade','rotateX'] // List of effects ONLY for list mode
+				});
+				
+				// HANDLE MULTI-DIMENSIONAL CHECKBOX FILTERING
+				/* 	
+				*	The desired behaviour of multi-dimensional filtering can differ greatly 
+				*	from project to project. MixItUp's built in filter button handlers are best
+				*	suited to simple filter operations, so we will need to build our own handlers
+				*	for this demo to achieve the precise behaviour we need.
+				*/
+				
+				var $filters = $('#Filters').find('li'),
+					dimensions = {
+						target: 'all', // Create string for first dimension
+						myrating: 'all'
+					};
+					
+				// Bind checkbox click handlers:
+				$filters.on('click',function(){
+					var $t = $(this),
+						dimension = $t.attr('data-dimension'),
+						filter = $t.attr('data-filter'),
+						filterString = dimensions[dimension];
+						
+					if(filter == 'all'){
+						// If "all"
+						if(!$t.hasClass('active')){
+							// if unchecked, check "all" and uncheck all other active filters
+							$t.addClass('active').siblings().removeClass('active');
+							// Replace entire string with "all"
+							filterString = 'all';	
+						} else {
+							// Uncheck
+							$t.removeClass('active');
+							// Emtpy string
+							filterString = '';
+						}
+					} else {
+						// Else, uncheck "all"
+						$t.siblings('[data-filter="all"]').removeClass('active');
+						// Remove "all" from string
+						filterString = filterString.replace('all','');
+						if(!$t.hasClass('active')){
+							// Check checkbox
+							$t.addClass('active');
+							// Append filter to string
+							filterString = filterString == '' ? filter : filterString+' '+filter;
+						} else {
+							// Uncheck
+							$t.removeClass('active');
+							// Remove filter and preceeding space from string with RegEx
+							var re = new RegExp('(\\s|^)'+filter);
+							filterString = filterString.replace(re,'');
+						};
+					};
+					
+					// Set demension with filterString
+					dimensions[dimension] = filterString;
+					
+					// We now have two strings containing the filter arguments for each dimension:	
+					console.info('dimension 1: '+dimensions.target);
+					console.info('dimension 2: '+dimensions.myrating);
+					
+					/*
+					*	We then send these strings to MixItUp using the filter method. We can send as
+					*	many dimensions to MixitUp as we need using an array as the second argument
+					*	of the "filter" method. Each dimension must be a space seperated string.
+					*
+					*	In this case, MixItUp will show elements using OR logic within each dimension and
+					*	AND logic between dimensions. At least one dimension must pass for the element to show.
+					*/
+					$('#Parks').mixitup('filter',[dimensions.target, dimensions.myrating])			
+				});
+
+			});
+		</script>
+		
+		<title>Genee - Get Account Suggestions</title>
+	<style type="text/css"></style></head>
+	<body>
+	<section>
+		
+		<!-- BEGIN DEMO WRAPPER -->
+		
+		<div class="wrapper wf">
+			
+			<!-- BEGIN CONTROLS -->
+			
+			<nav class="controls just">
+				<div class="group" id="Filters">
+					<div class="drop_down wf">
+						<span class="anim150">Target</span>
+						<ul class="anim250">
+							<li class="active" data-filter="all" data-dimension="target">All</li>
+							<li data-filter="high" data-dimension="target">High</li>
+							<li data-filter="medium" data-dimension="target">Medium</li>
+							<li data-filter="low" data-dimension="target">Low</li>
+						</ul>
+					</div>
+					<div class="drop_down wf">
+						<span class="anim150">My Rating</span>
+						<ul class="anim250">
+							<li class="active" data-filter="all" data-dimension="myrating">All</li>
+							<li data-filter="1star" data-dimension="myrating">★</li>
+							<li data-filter="2star" data-dimension="myrating">★★</li>
+							<li data-filter="3star" data-dimension="myrating">★★★</li>
+							<li data-filter="4star" data-dimension="myrating">★★★★</li>
+							<li data-filter="5star" data-dimension="myrating">★★★★★</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			
+			<!-- END CONTROLS -->
+			
+			<!-- BEGIN PARKS -->
+			
+			<ul id="Parks" class="just list">
+				
+				<!-- "TABLE" HEADER CONTAINING SORT BUTTONS (HIDDEN IN GRID MODE)-->
+				
+				<div class="list_header">
+					<div class="meta ranking active asc"># &nbsp;
+						<span class="sort anim150 asc" data-sort="data-ranking" data-order="desc"></span>
+						<span class="sort anim150 desc" data-sort="data-ranking" data-order="asc"></span>	
+					</div>
+					<div class="meta name" id="SortByName">
+						ACCOUNT NAME &nbsp;
+						<span class="sort anim150 asc" data-sort="data-name" data-order="desc"></span>
+						<span class="sort anim150 desc" data-sort="data-name" data-order="asc"></span>	
+					</div>
+					<div class="meta drivingt">DRIVE &nbsp;
+						<span class="sort anim150 asc" data-sort="data-drivet" data-order="asc"></span>
+						<span class="sort anim150 desc" data-sort="data-drivet" data-order="desc"></span>
+					</div>
+					<div class="meta hcps">HCPs &nbsp;
+						<span class="sort anim150 asc" data-sort="data-prescribers" data-order="asc"></span>
+						<span class="sort anim150 desc" data-sort="data-prescribers" data-order="desc"></span>
+					</div>
+					<div class="meta target" id="SortByTarget">TARGET</div>
+					<div class="meta ptp">PTP &nbsp;
+						<span class="sort anim150 asc" data-sort="data-ptp" data-order="asc"></span>
+						<span class="sort anim150 desc" data-sort="data-ptp" data-order="desc"></span>
+					</div>
+					<div class="meta r13">R13 &nbsp;
+						<span class="sort anim150 asc" data-sort="data-r13" data-order="asc"></span>
+						<span class="sort anim150 desc" data-sort="data-r13" data-order="desc"></span>
+					</div>
+					<div class="meta myrating">MY RATING &nbsp;
+						<span class="sort anim150 asc" data-sort="data-myrating" data-order="asc"></span>
+						<span class="sort anim150 desc" data-sort="data-myrating" data-order="desc"></span>
+					</div>
+				</div>
+				
+				<!-- FAIL ELEMENT -->
+				
+				<div class="fail_element anim250">Sorry — we could not find any accounts matching matching these criteria</div>
+				
+				<!-- BEGIN LIST OF PARKS (MANY OF THESE ELEMENTS ARE VISIBLE ONLY IN LIST MODE)-->
+				<script>									
+					jQuery.each(ACCOUNTS_DB, function() {
+						// Sorting is done by data-attributes
+						var $newrow = $('<li class="mix" />');
+						$newrow.attr({
+							'data-name': this.practice, 
+							'data-ranking': this.ranking,
+							'data-ptp': this.ptp,
+							'data-r13': this.r12,
+							'data-myrating': this.myrating,
+							'data-prescribers': this.num_prescribers,
+							'data-drivet': this.drivingtime,
+							'data-style': "display: block; opacity: 1;"
+						});
+ 						
+ 						// Filters are done by css class
+ 						if(this.num_high > 0){
+							$newrow.addClass("high");
+						} 
+						if(this.num_med > 0){
+							$newrow.addClass("medium");
+						}
+						if(this.num_low > 0){
+							$newrow.addClass("low");
+						}
+						$newrow.addClass(this.myrating + "star");
+						
+						$newrow.addClass("mix_all");
+						
+						// Render each row
+						$newrow.append('<div class="meta ranking"><p>' + this.ranking + '</p></div>');
+						$newrow.append('<div class="meta name"><div class="titles"><h2>' + this.practice + '</h2><p><em>' + this.address + '</em></p></div></div>');
+						$newrow.append('<div class="meta drivingt"><p>' + this.drivingtime + ' mins</p></div>');
+						$newrow.append('<div class="meta hcps"><ul><li><b>' + this.num_prescribers + '</b> Prescribers</li><li>' + this.num_nurses + ' Nurses</li></ul></div>');
+						$newrow.append('<div class="meta target"><ul><li>' + this.num_high + ' High</li><li>' + this.num_med + ' Medium</li><li>' + this.num_low + ' Low</li></ul>');
+						$newrow.append('<div class="meta ptp"><p>' + this.ptp + '</p></div>');
+						
+						// Color the sales growth
+						var $r13_cell = $('<div class="meta r13"><p>' + this.r13 + '</p></div>');
+						if(this.r13 > 0){
+							$r13_cell.addClass("pos_growth");
+						}
+						else if(this.r13 < 0){
+							$r13_cell.addClass("neg_growth");
+						}
+						$newrow.append($r13_cell);
+						
+						var $rate_str = "";
+						for(var i=0; i<this.myrating; i++){
+							$rate_str += "★";
+						}
+						if(this.myrating == 0){
+							$rate_str = "-";
+						}
+						
+						$newrow.append('<div class="meta myrating"><p>' + $rate_str + '</p></div>');
+						$('#Parks').append($newrow);
+					});
+				</script>
+<!--
+				Boilerplate HTML to refer to
+				
+				<li class="mix high medium mix_all" 
+					data-name="Western Oncology" data-ptp="4" data-r13="0%" data-myrating="5" 
+					data-style="display: block; opacity: 1;">
+					<div class="meta ranking">
+						<p>1</p>
+					</div>
+					<div class="meta name">
+						<div class="titles">
+							<h2>Western Oncology</h2>
+							<p><em>7 Spring St.</em></p>
+						</div>
+					</div>
+					<div class="meta drivingt">
+						<p>00:30</p>
+					</div>
+					<div class="meta hcps">
+						<ul>
+							<li>2 Prescribers</li>
+							<li>4 Nurses</li>
+						</ul>
+					</div>
+					<div class="meta target">
+						<ul>
+							<li>5 High</li>
+							<li>3 Medium</li>
+							<li>0 Low</li>
+						</ul>
+					</div>
+					<div class="meta ptp">
+						<p>4%</p>
+					</div>
+					<div class="meta r13">
+						<p>0%</p>
+					</div>
+					<div class="meta myrating">
+						<p>5</p>
+					</div>
+				</li>
+
+				<li class="mix high medium mix_all" 
+					data-name="University of Texas" data-ptp="20" data-r13="-100%" data-myrating="3" 
+					style="display: block; opacity: 1;">
+					<div class="meta ranking">
+						<p>2</p>
+					</div>
+					<div class="meta name">
+						<div class="titles">
+							<h2>University of Texas</h2>
+							<h2>M.D. Anderson Cancer Center</h2>
+							<p><em>121 Green St.</em></p>
+						</div>
+					</div>
+					<div class="meta drivingt">
+						<p>00:56</p>
+					</div>
+					<div class="meta hcps">
+						<ul>
+							<li>2 Prescribers</li>
+							<li>4 Nurses</li>
+						</ul>
+					</div>
+					<div class="meta target">
+						<ul>
+							<li>2 High</li>
+							<li>1 Medium</li>
+							<li>0 Low</li>
+						</ul>
+					</div>
+					<div class="meta ptp">
+						<p>20%</p>
+					</div>
+					<div class="meta r13">
+						<p>-100%</p>
+					</div>
+					<div class="meta myrating">
+						<p>3</p>
+					</div>
+				</li>
+				
+				<li class="mix high low mix_all" data-name="M.D. Reeves" 
+					data-ptp="13" data-r13="20%" data-myrating="4" 
+					style="display: block; opacity: 1;">
+					<div class="meta ranking">
+						<p>3</p>
+					</div>
+					<div class="meta name">
+						<div class="titles">
+							<h2>M.D. Reeves Oncology</h2>
+							<p><em>121 Green St.</em></p>
+						</div>
+					</div>
+					<div class="meta drivingt">
+						<p>01:30</p>
+					</div>
+					<div class="meta hcps">
+						<ul>
+							<li>2 Prescribers</li>
+							<li>4 Nurses</li>
+						</ul>
+					</div>
+					<div class="meta target">
+						<ul>
+							<li>1 High</li>
+							<li>0 Medium</li>
+							<li>1 Low</li>
+						</ul>
+					</div>
+					<div class="meta ptp">
+						<p>13%</p>
+					</div>
+					<div class="meta r13">
+						<p>20%</p>
+					</div>
+					<div class="meta myrating">
+						<p>4</p>
+					</div>
+				</li>
+-->
+				<!-- END LIST OF PARKS -->	
+			</ul>
+		</div>
+		
+		<!-- END DEMO WRAPPER -->
+		
+		</section>
+		
+		<!-- BEGIN FOOTER -->
+			Powered by <strong>MixItUp</strong>, a <a href="http://mixitup.io/demos/parks#">Barrel Tool</a>
+		<!-- END FOOTER -->
+		
+</body>
+</html>

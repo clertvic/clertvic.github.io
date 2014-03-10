@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Notes</title>
+
+<link href="css/redmond/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css">
+<link href="css/notes-zout-style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script>
+$(document).ready(function() {
+	
+$(function() {
+    function updateTips( t ) {
+      tips
+        .text( t )
+        .addClass( "ui-state-highlight" );
+      setTimeout(function() {
+        tips.removeClass( "ui-state-highlight", 1500 );
+      }, 500 );
+    }
+ 
+    function checkLength( o, n, min, max ) {
+      if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+          min + " and " + max + "." );
+        return false;
+      } else {
+        return true;
+      }
+    }
+ 
+	function checkRegexp( o, regexp, n ) {
+		if ( !( regexp.test( o.val() ) ) ) {
+			o.addClass( "ui-state-error" );
+			updateTips( n );
+			return false;
+		} else {
+			return true;
+		}
+	}
+	 
+	$("#dialog-form").dialog({
+		autoOpen: false,
+		height: 400,
+		width: 400,
+		modal: true,
+		buttons: {
+			"Save": function() {
+				debugger;
+				var n_color = $(".selected_color").attr("id");
+				var cluster = $('#n_cluster_target').val(),
+					newItem = $('<li class="n_note ' + n_color + ' " data="' + $('#n_body').val() + '"><a href="#"><p>' + $('#n_prescriber_cat').val() + '</p></a></li>');
+				newItem.insertBefore('#' + cluster + " li.n_addnote");
+				$(this).dialog("close");
+			},
+			Cancel: function() {
+				$(this).dialog("close");
+			}
+		},
+		close: function() {
+/* 			allFields.val("").removeClass("ui-state-error"); */
+		}
+	});
+	
+	$("#zoomed-in-group").dialog({
+		autoOpen: false,
+		height: 540,
+		width: 730,
+		modal: true
+	});
+ 
+	$(".n_addnote")
+		.click(function(e) {
+			$("#n_cluster_target").val(e.currentTarget.parentNode.parentNode.id);
+			$("#dialog-form").dialog("open");
+	});
+	
+	$(".n_note")
+		.click(function(e) {
+			var cluster = e.currentTarget.parentNode.parentNode.id,
+				n_list = $('#' + cluster + ' li.n_note'),
+				$big_note = $('<li />'),
+				$zoom_list = $('<ul />');
+				
+
+				$.each(n_list, function() {
+					$big_note = $('<li />');
+					$big_note.attr("class", this.getAttribute("class"));
+					$big_note.append('<a href="#"><h2>' + this.children[0].children[0].innerHTML + '</h2><p>' + this.getAttribute("data") + '</p></a>')
+					$zoom_list.append($big_note);
+				});
+				
+/* 				$zoom_list.append('<li class="n_addnote"><a href="#"><p>+</p></a></li>'); */
+				$("#zoomed-in-group").html($zoom_list);
+				$("#zoomed-in-group").dialog("open");
+	});
+	
+	$("#n_prescriber_cat")
+		.change(function(e) {
+			var notetype = "";
+			$("select#n_prescriber_cat option:selected").each(function () {
+				notetype += $(this).text();
+			});
+			if(notetype == "Email"){
+				$("#n_details_input").html('<input type="textarea" id="n_body" value="" class="text ui-widget-content ui-corner-all">');
+			}
+			else if(notetype == "Vacation"){
+				$("#n_details_input").html('<label for="vac_start">From</label><input type="text" id="vac_start" name="vac_start"/><label for="vac_end">to</label><input type="text" id="vac_end" name="vac_end"/><input type="hidden" id="n_body" />');
+				
+				$("#vac_start").datepicker({
+					defaultDate: "+1w",
+					changeMonth: true,
+					onClose: function( selectedDate ) {
+						$( "#to" ).datepicker( "option", "minDate", selectedDate );
+					}
+				});
+				$("#vac_end").datepicker({
+					defaultDate: "+1w",
+					changeMonth: true,
+					onClose: function( selectedDate ) {
+						$( "#from" ).datepicker( "option", "maxDate", selectedDate );
+					}
+				});
+			}
+			else if(notetype == "Marketing Materials"){
+				$("#n_details_input").html('<input type="checkbox" id="check1" /><label for="check1">iDetail</label><input type="checkbox" id="check2" /><label for="check2">RAMP</label><input type="checkbox" id="check3" /><label for="check3">Paper</label>');
+			}
+	});
+	
+	$(".color-swatch")
+		.click(function (e){
+			$(".color-swatch").each(function (){
+				$(this).html("");
+				$(this).removeClass("selected_color");
+			});
+			
+			var $selected_swatch = $(e.currentTarget);
+			$selected_swatch.html("✓");
+			$selected_swatch.addClass("selected_color");
+	});
+});
+
+});
+</script>
+</head>
+<body>
+	<div id="acc_header">
+		<table id="acc_table">
+			<tr>
+				<td class="cell_top">
+					<span class="nickname">Nickname: Abram</span>
+					<span class="phone">(713) 467-1630</span>
+					<hr />
+					<span class="acc_name">Hematology Oncology Associates</span><br />
+					<span class="address">925 Gessner Road, Suite 306</span><br />
+					<span class="address">Houston, TX 77024</span>
+				</td>
+				<td class="cell_top">
+					<span class="hours">M W F 8:30 AM - 5 PM T Th 10:30 AM - 6:30 PM</span>
+					<hr />
+					<table id="stats">
+						<tr>
+							<th>PTP</th>
+							<th>R13</th>
+							<th>My Rating</th>
+							<th>Target</th>
+						</tr>
+						<tr>
+							<td>13%</td>
+							<td>0%</td>
+							<td>*****</td>
+							<td>2H 0M 1L</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+<div id="notes_body">
+	<!-- PRESCRIBERS -->
+	<div class="n_category" id="n_prescribers">
+		<h1>Prescribers</h1>
+		<div class="n_cluster" id="abramnowitz">
+			<h2>Joel Abramnowitz, MD, PhD</h2>
+			<ul>
+				<li class="n_note n_blue" data="M W F 8:30 AM - 5 PM">
+					<a href="#">
+						<p>Office Hours</p>
+					</a>
+				</li>
+				<li class="n_note n_blue" data="Mondays 8 PM">
+					<a href="#">
+						<p>Best Time</p>
+					</a>
+				</li>
+				<li class="n_note n_blue" data="joela@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>	
+				<li class="n_note n_yellow" data="5/13/2013">
+					<a href="#">
+						<p>Last Interaction</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="n_cluster" id="morkas">
+			<h2>Muffaddal S. Morkas, MD</h2>
+			<ul>
+				<li class="n_note n_green" data="iDetail, PDFs, RAMP emails">
+					<a href="#">
+						<p>Preferred Materials</p>
+					</a>
+				</li>
+				<li class="n_note n_green" data="muffaddal@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="Prefers email communication only">
+					<a href="#">
+						<p>Dislikes Reps</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="n_cluster" id="manhas">
+			<h2>Atisha P. Manhas, MD</h2>
+			<ul>
+				<li class="n_note n_blue" data="M W 1:30 - 4 PM">
+					<a href="#">
+						<p>Best Time</p>
+					</a>
+				</li>
+				<li class="n_note n_blue" data="M W T Th F 8:30 AM - 5:30 PM">
+					<a href="#">
+						<p>Office Hours</p>
+					</a>
+				</li>
+				<li class="n_note n_blue" data="7542">
+					<a href="#">
+						<p>Phone Extension</p>
+					</a>
+				</li>
+				<li class="n_note n_blue" data="manhas@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="7/31 - 8/14">
+					<a href="#">
+						<p>Vacation</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- NURSES -->
+	<div class="n_category" id="n_nurses">
+		<h1>Nurses</h1>
+		<div class="n_cluster" id="perez">
+			<h2>Roxana Perez, LPN</h2>
+			<ul>
+				<li class="n_note n_green" data="roxana@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_note n_green" data="5025">
+					<a href="#">
+						<p>Phone Extension</p>
+					</a>
+				</li>
+				<li class="n_note n_yellow" data="Dr. Abramnowitz">
+					<a href="#">
+						<p>Influencer</p>
+					</a>
+				</li>	
+				<li class="n_note n_yellow" data="7/12/2013">
+					<a href="#">
+						<p>Last In-Service</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="6/22/2013">
+					<a href="#">
+						<p>Last Interaction</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="n_cluster" id="rogers">
+			<h2>Alina Rogers, RN</h2>
+			<ul>
+				<li class="n_note n_green" data="3532">
+					<a href="#">
+						<p>Phone Extension</p>
+					</a>
+				</li>
+				<li class="n_note n_yellow" data="alinr@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="n_cluster" id="adate">
+			<h2>Aishwarya Date, CNA</h2>
+			<ul>
+				<li class="n_note n_blue" data="aish@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_note n_yellow" data="Dr. Morkas">
+					<a href="#">
+						<p>Influencer</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="n_cluster" id="zelnik">
+			<h2>Gonzalo Zelnik</h2>
+			<ul>
+				<li class="n_note n_blue" data="gonzaloz@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_note n_yellow" data="Dr. Abramnovitz">
+					<a href="#">
+						<p>Influencer</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- STAFF -->
+	<div class="n_category" id="n_staff">
+		<h1>Staff</h1>
+		<div class="n_cluster" id="santana">
+			<h2>Cynthia Santana</h2>
+			<ul>
+				<li class="n_note n_blue" data="cynthia@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="n_cluster" id="gonzalez">
+			<h2>Mark Gonzalez</h2>
+			<ul>
+				<li class="n_note n_green" data="Paper brochures">
+					<a href="#">
+						<p>Preferred Materials</p>
+					</a>
+				</li>
+				<li class="n_note n_green" data="markg@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="6/23/13">
+					<a href="#">
+						<p>Last Interaction</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="n_cluster" id="casamento">
+			<h2>Tina Casamento, Practice Mgr.</h2>
+			<ul>
+				<li class="n_note n_blue" data="4241">
+					<a href="#">
+						<p>Phone Extension</p>
+					</a>
+				</li>
+				<li class="n_note n_blue" data="tcasa@hoassociates.com">
+					<a href="#">
+						<p>Email</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="4/12/13">
+					<a href="#">
+						<p>Last Interaction</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="8/12 - 8/21">
+					<a href="#">
+						<p>Vacation</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- OTHER -->
+	<div class="n_category" id="n_other">
+		<h1>Other</h1>
+		<div class="n_cluster" id="reminders">
+			<h2>Reminders</h2>
+			<ul>
+				<li class="n_note n_pink" data="8/21/2013">
+					<a href="#">
+						<p>Lunch Appt.</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="Call TLL for speaker">
+					<a href="#">
+						<p>Call Internal</p>
+					</a>
+				</li>
+				<li class="n_note n_pink" data="Ian Fisher">
+					<a href="#">
+						<p>MSL for Lunch</p>
+					</a>
+				</li>	
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="n_cluster" id="billing">
+			<h2>Billing</h2>
+			<ul>
+				<li class="n_note n_green" data="Spoke about Co-Pay on 5/28">
+					<a href="#">
+						<p>Co-Pay Program</p>
+					</a>
+				</li>
+				<li class="n_note n_green" data="Spoke to Case Manager on 4/25">
+					<a href="#">
+						<p>Access Solutions</p>
+					</a>
+				</li>
+				<li class="n_note n_blue" data="Eileen Brown">
+					<a href="#">
+						<p>FRM</p>
+					</a>
+				</li>
+				<li class="n_addnote">
+					<a href="#">
+						<p>+</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="n_cluster" id="dietary">
+			<h2>Dietary Restrictions</h2>
+			<ul>
+				<li class="n_note n_green" data="Joel Abramnowitz, Gonzalo Zelnik">
+					<a href="#">
+						<p>Kosher</p>
+					</a>
+				</li>
+				<li class="n_note n_green" data="Tina Casamento">
+					<a href="#">
+						<p>Vegetarian</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>	
+
+<div id="dialog-form" title="Add New Note">
+  <form>
+  	<!-- This is an identifier so we know which cluster of notes was clicked on. Value gets set in click handler. Hidden form field -->
+  	<input type="hidden" id="n_cluster_target" />
+  	<table id="compose_note">
+  	<tr>
+	  	<td>
+	  		<!-- color swatches -->
+			<ul id="color_options">
+				<li id="n_green selected_color" class="color-swatch" style="background-color: #e2f7d5; border-color: rgb(0, 0, 0);">✓</li>
+				<li id="n_pink" class="color-swatch" style="background-color: #f4dfe6; border-color: rgb(0, 0, 0);">&nbsp;</li>
+				<li id="n_blue" class="color-swatch" style="background-color: #ddf1f7; border-color: rgb(0, 0, 0);">&nbsp;</li>
+				<li id="n_yellow" class="color-swatch" style="background-color: #ffc; border-color: rgb(0, 0, 0);">&nbsp;</li>
+			</ul>
+	  	</td>
+  	
+	  	<td>
+			<fieldset>
+			<label for="n_title">Choose note type:</label>
+			
+			<select id="n_prescriber_cat">
+				<option>Choose a Note Type</option>
+				<option>Best Time</option>
+				<option>Office Hours</option>
+				<option>Vacation</option>
+				<option>Marketing Materials</option>
+				<option>Attitude Towards Reps</option>
+				<option>Extension Numbers</option>
+				<option>Email</option>
+				<option>Last Interaction Date</option>
+			</select>
+			
+			<br /><br />
+			<label for="n_body">Note details:</label>
+			<div id="n_details_input">
+				<!-- Stuff here -->
+			</div>
+			</fieldset>
+	  	</td>	
+  	</tr>
+  	</table>
+
+  </form>
+</div>
+
+<div id="zoomed-in-group" title="Notes">
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=1">
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
+        <link href="css/redmond/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="css/parks.css">
+        
+
+        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.sortable.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="js/jquery.mixitup.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+
+        <!--  
+
+        NATIONAL PARKS: A MIXITUP DEMO
+        
+        Concept and development by Patrick Kunka
+        Design by Jane Song
+        
+        MixItUp is free for non-commercial and commercial use.
+        Copyright 2013 Barrel LLC.
+        
+        http://mixitup.io
+        http://www.barrelny.com
+        
+        DEMO FEATURES
+        
+        - Switch between grid and list view using the 'toGrid' and 'toList' methods
+        - Use different stylings for grid and list views via the 'gridClass' and 'listClass' options
+        - Sort by name and by target using sort buttons
+        - Complex multi-dimensional checkbox filtering using the 'filter' method and custom click handlers
+        - Fade-in "fail element" when MixItUp's filters return no elements.
+        
+        We hope you find this demo useful and educational,
+        Enjoy!
+        
+        The MixItUp Team
+        
+        -->
+        <script>
+            ACCOUNTS_DB = [
+                {
+                    "ranking": "1",
+                    "practice": "St. Mary's Hospital",
+                    "address1": "133 Wood Ave",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "22",
+                    "num_prescribers": "6",
+                    "num_nurses": "3",
+                    "num_high": "2",
+                    "num_med": "2",
+                    "num_low": "2",
+                    "myrating": "3",
+                    "r13": "-88.2 %",
+                    "ptp": "70 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "2",
+                    "practice": "University of Texas M.D. Anderson Cancer Center",
+                    "address1": "203 Morewood",
+                    "address2": "Briarforest, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "56",
+                    "num_prescribers": "13",
+                    "num_nurses": "20",
+                    "num_high": "6",
+                    "num_med": "4",
+                    "num_low": "3",
+                    "myrating": "2",
+                    "r13": "-100 %",
+                    "ptp": "90 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "3",
+                    "practice": "Menninger Clinic",
+                    "address1": "1121 Utah Street, Suite 2301",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "12",
+                    "num_prescribers": "3",
+                    "num_nurses": "4",
+                    "num_high": "2",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "4",
+                    "r13": "4 %",
+                    "ptp": "92 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "4",
+                    "practice": "Crossroads Convalescent Home",
+                    "address1": "401 Van Buren Street",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "15",
+                    "num_prescribers": "3",
+                    "num_nurses": "5",
+                    "num_high": "1",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "2",
+                    "r13": "45 %",
+                    "ptp": "87 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "5",
+                    "practice": "Western Oncology",
+                    "address1": "7 Spring St",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "30",
+                    "num_prescribers": "2",
+                    "num_nurses": "4",
+                    "num_high": "2",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "5",
+                    "r13": "0 %",
+                    "ptp": "73 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "6",
+                    "practice": "St. Luke's Episcopal Hospital",
+                    "address1": "1506 Ridgewood Street 3 fl.",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "34",
+                    "num_prescribers": "3",
+                    "num_nurses": "7",
+                    "num_high": "1",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "14.3 %",
+                    "ptp": "95 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "7",
+                    "practice": "Milan Medical Center",
+                    "address1": "22 Newton John Street",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "8",
+                    "num_prescribers": "2",
+                    "num_nurses": "6",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "2",
+                    "myrating": "2",
+                    "r13": "-26.7 %",
+                    "ptp": "65 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "8",
+                    "practice": "Medical Clinic of Houston",
+                    "address1": "207 Magic Johnson Blvd.",
+                    "address2": "Briarforest, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "19",
+                    "num_prescribers": "8",
+                    "num_nurses": "12",
+                    "num_high": "1",
+                    "num_med": "5",
+                    "num_low": "2",
+                    "myrating": "2",
+                    "r13": "-62.5 %",
+                    "ptp": "60 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "9",
+                    "practice": "M.D. Angela Del Rosario",
+                    "address1": "3 Ave. of Two Rivers",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "25",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "5",
+                    "r13": "-100 %",
+                    "ptp": "90 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "10",
+                    "practice": "Fitzgerald & Associates",
+                    "address1": "237 N. Dithridge Ave.",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "27",
+                    "num_prescribers": "2",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "50 %",
+                    "ptp": "88 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "11",
+                    "practice": "Hematology Oncology Associates",
+                    "address1": "300 S. Craig Street, 4 floor",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "48",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "2",
+                    "r13": "-14 %",
+                    "ptp": "97 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "12",
+                    "practice": "Hematology Oncology Associates",
+                    "address1": "925 Gessner Road, Suite 306",
+                    "address2": "Houston TX",
+                    "zipcode": "77024",
+                    "drivingtime": "52",
+                    "num_prescribers": "2",
+                    "num_nurses": "2",
+                    "num_high": "1",
+                    "num_med": "1",
+                    "num_low": "0",
+                    "myrating": "4",
+                    "r13": "17.5 %",
+                    "ptp": "100 %",
+                    "reptracx" : "Yes"
+                },
+                {
+                    "ranking": "13",
+                    "practice": "First City Hospital",
+                    "address1": "9800 Pocahontas Blvd",
+                    "address2": "Timbergrove, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "57",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "1",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "0 %",
+                    "ptp": "92 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "14",
+                    "practice": "Texas Oncology",
+                    "address1": "6200 Fifth Avenue, Suite 116",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "27",
+                    "num_prescribers": "2",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "2",
+                    "num_low": "0",
+                    "myrating": "4",
+                    "r13": "-20 %",
+                    "ptp": "97 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "15",
+                    "practice": "M.D. Lawrence Foote",
+                    "address1": "345 Magic Pl",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "29",
+                    "num_prescribers": "1",
+                    "num_nurses": "2",
+                    "num_high": "0",
+                    "num_med": "1",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "0 %",
+                    "ptp": "89 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "16",
+                    "practice": "St. Clara Hospital",
+                    "address1": "1234 Elm Street",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "45",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "4",
+                    "r13": "12.5 %",
+                    "ptp": "86 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "17",
+                    "practice": "M.D. John Sherwood",
+                    "address1": "216 Melwood Ave.",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "68",
+                    "num_prescribers": "1",
+                    "num_nurses": "3",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "0 %",
+                    "ptp": "83 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "18",
+                    "practice": "Dr. Amy A Hassan",
+                    "address1": "125 Forth Ave",
+                    "address2": "Houston, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "72",
+                    "num_prescribers": "1",
+                    "num_nurses": "3",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "5",
+                    "r13": "-100 %",
+                    "ptp": "74 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "19",
+                    "practice": "M.D. Reeves Oncology",
+                    "address1": "6028 Cruse Road",
+                    "address2": "Greenspoint, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "75",
+                    "num_prescribers": "1",
+                    "num_nurses": "4",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "4",
+                    "r13": "-57.1 %",
+                    "ptp": "62 %",
+                    "reptracx": "Yes"
+                },
+                {
+                    "ranking": "20",
+                    "practice": "Dr. Barry S Siller",
+                    "address1": "27 Spring Street",
+                    "address2": "Gulfton, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "88",
+                    "num_prescribers": "1",
+                    "num_nurses": "1",
+                    "num_high": "0",
+                    "num_med": "0",
+                    "num_low": "1",
+                    "myrating": "2",
+                    "r13": "-100 %",
+                    "ptp": "60 %",
+                    "reptracx": "No"
+                },
+                {
+                    "ranking": "21",
+                    "practice": "Pulmonary Critical Care",
+                    "address1": "607 Tiny Ave",
+                    "address2": "Briarforest, TX",
+                    "zipcode": "77002",
+                    "drivingtime": "91",
+                    "num_prescribers": "1",
+                    "num_nurses": "5",
+                    "num_high": "1",
+                    "num_med": "0",
+                    "num_low": "0",
+                    "myrating": "3",
+                    "r13": "-27.3 %",
+                    "ptp": "69 %",
+                    "reptracx": "No"
+                }
+            ];
+
+            PRESCRIBERS_DB = [
+                {
+                    "parent_ranking": "5",
+                    "ranking": "1",
+                    "name": "Ernest Amegashie, MD",
+                    "best_time": "01:30 - 03:00 pm",
+                    "last_interaction": "5/23/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "5",
+                    "ranking": "2",
+                    "name": "Jeffrey Cowen, PA",
+                    "best_time": "02:30 - 03:30 pm",
+                    "last_interaction": "6/4/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "1",
+                    "ranking": "1",
+                    "name": "Atif Abbas, MD",
+                    "best_time": "11:30 am - 03:00 pm",
+                    "last_interaction": "6/13/13",
+                    "target": "High",
+                    "r13": "-44.20 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "1",
+                    "ranking": "2",
+                    "name": "Matti Aapro, MD",
+                    "best_time": "12:30 - 03:00 pm",
+                    "last_interaction": "6/4/13",
+                    "target": "High",
+                    "r13": "-44 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "1",
+                    "ranking": "3",
+                    "name": "Maureen Aarts, MD",
+                    "best_time": "11:15 am - 01:15 pm",
+                    "last_interaction": "6/3/13",
+                    "target": "Low",
+                    "r13": "0 %",
+                    "my_rating": "2"
+                },
+                {
+                    "parent_ranking": "1",
+                    "ranking": "4",
+                    "name": "Anthony Aban, PA",
+                    "best_time": "12:10 - 04:10 pm",
+                    "last_interaction": "4/15/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "1",
+                    "ranking": "5",
+                    "name": "Gina Henry, NP",
+                    "best_time": "02:45 - 3:15 pm",
+                    "last_interaction": "3/26/13",
+                    "target": "Low",
+                    "r13": "0 %",
+                    "my_rating": "1"
+                },
+                {
+                    "parent_ranking": "1",
+                    "ranking": "6",
+                    "name": "Aaron Hertz, PA",
+                    "best_time": "10:15 - 11:35 am",
+                    "last_interaction": "6/28/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "4"
+                },
+                {
+                    "parent_ranking": "19",
+                    "ranking": "1",
+                    "name": "Honey Sarita Abarquez, MD",
+                    "best_time": "01:30 - 03:00 pm",
+                    "last_interaction": "5/7/13",
+                    "target": "Low",
+                    "r13": "-57.10 %",
+                    "my_rating": "4"
+                },
+                {
+                    "parent_ranking": "6",
+                    "ranking": "1",
+                    "name": "Rita Marquez, MD",
+                    "best_time": "11:15 am - 02:00 pm",
+                    "last_interaction": "1/8/13",
+                    "target": "Medium",
+                    "r13": "8.10 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "6",
+                    "ranking": "2",
+                    "name": "Alicia Ruben, PA",
+                    "best_time": "02:30 - 03:30 pm",
+                    "last_interaction": "6/19/13",
+                    "target": "High",
+                    "r13": "6.20 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "6",
+                    "ranking": "3",
+                    "name": "Carl Linon, MD",
+                    "best_time": "04:10 - 05:15 pm",
+                    "last_interaction": "6/19/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "3",
+                    "ranking": "1",
+                    "name": "Lilian Michaels, OD",
+                    "best_time": "01:00 - 03:00 pm",
+                    "last_interaction": "5/1/13",
+                    "target": "High",
+                    "r13": "1 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "3",
+                    "ranking": "2",
+                    "name": "Jeffrey Ted, PA",
+                    "best_time": "01:30 - 03:30 pm",
+                    "last_interaction": "5/1/13",
+                    "target": "High",
+                    "r13": "3 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "3",
+                    "ranking": "3",
+                    "name": "Mary Ackerman, MD",
+                    "best_time": "10:35 am - 12:15 pm",
+                    "last_interaction": "5/1/13",
+                    "target": "Low",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "11",
+                    "ranking": "1",
+                    "name": "Saramma Alexander, OD",
+                    "best_time": "01:30 - 03:00 pm",
+                    "last_interaction": "5/2/13",
+                    "target": "Low",
+                    "r13": "-14 %",
+                    "my_rating": "2"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "1",
+                    "name": "Ted Rupert, MD",
+                    "best_time": "11:30 - 11:45 am",
+                    "last_interaction": "5/10/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "2",
+                    "name": "Martha Lopez, NP",
+                    "best_time": "01:10 - 01:45 pm",
+                    "last_interaction": "4/15/13",
+                    "target": "High",
+                    "r13": "10 %",
+                    "my_rating": "4"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "3",
+                    "name": "Jessica Fenz, PA",
+                    "best_time": "02:15 - 03:45 pm",
+                    "last_interaction": "4/22/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "4",
+                    "name": "Marcus Solo, MD",
+                    "best_time": "",
+                    "last_interaction": "4/15/13",
+                    "target": "Medium",
+                    "r13": "-200 %",
+                    "my_rating": "4"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "5",
+                    "name": "Timothy Win, NP",
+                    "best_time": "",
+                    "last_interaction": "4/4/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "4"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "6",
+                    "name": "Susan Mils, MD",
+                    "best_time": "",
+                    "last_interaction": "4/4/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "7",
+                    "name": "Parker Ford, OD",
+                    "best_time": "",
+                    "last_interaction": "6/3/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "8",
+                    "name": "Dolorez Miele, NP",
+                    "best_time": "03:15 - 03:40 pm",
+                    "last_interaction": "3/12/13",
+                    "target": "High",
+                    "r13": "50 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "9",
+                    "name": "Mila Munez, PA",
+                    "best_time": "",
+                    "last_interaction": "4/3/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "10",
+                    "name": "Kira Tomas, MD",
+                    "best_time": "12:05 - 01:30 pm",
+                    "last_interaction": "",
+                    "target": "Low",
+                    "r13": "25 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "11",
+                    "name": "Vincenzo Adamo, MD",
+                    "best_time": "",
+                    "last_interaction": "5/28/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "4"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "12",
+                    "name": "Ari  Capetaz, OD",
+                    "best_time": "02:30 - 04:30 pm",
+                    "last_interaction": "",
+                    "target": "Low",
+                    "r13": "0 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "2",
+                    "ranking": "13",
+                    "name": "Ursula Hopkins, NP",
+                    "best_time": "",
+                    "last_interaction": "5/28/13",
+                    "target": "Low",
+                    "r13": "15 %",
+                    "my_rating": "1"
+                },
+                {
+                    "parent_ranking": "14",
+                    "ranking": "1",
+                    "name": "Clara Ribeiro, MD",
+                    "best_time": "11:30 - 11:50 am",
+                    "last_interaction": "5/28/13",
+                    "target": "Medium",
+                    "r13": "-10 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "14",
+                    "ranking": "2",
+                    "name": "Mark Stevens, OD",
+                    "best_time": "",
+                    "last_interaction": "",
+                    "target": "Medium",
+                    "r13": "-10 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "17",
+                    "ranking": "1",
+                    "name": "John Sherwood, MD",
+                    "best_time": "10:35 am - 11:00 am",
+                    "last_interaction": "4/23/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "10",
+                    "ranking": "1",
+                    "name": "Scott Fitzgerald, MD",
+                    "best_time": "",
+                    "last_interaction": "4/23/13",
+                    "target": "Medium",
+                    "r13": "30 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "10",
+                    "ranking": "2",
+                    "name": "Melissa Kin, NP",
+                    "best_time": "03:10 - 04:05 pm",
+                    "last_interaction": "4/23/13",
+                    "target": "Medium",
+                    "r13": "20 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "20",
+                    "ranking": "1",
+                    "name": "Barry S Siller, MD",
+                    "best_time": "",
+                    "last_interaction": "5/24/13",
+                    "target": "Low",
+                    "r13": "-100 %",
+                    "my_rating": "2"
+                },
+                {
+                    "parent_ranking": "9",
+                    "ranking": "1",
+                    "name": "Angela Del Rosario, MD",
+                    "best_time": "01:30 - 03:20 pm",
+                    "last_interaction": "5/7/13",
+                    "target": "Low",
+                    "r13": "-100 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "4",
+                    "ranking": "1",
+                    "name": "John Katz, OD",
+                    "best_time": "04:15 - 05:15 pm",
+                    "last_interaction": "5/15/13",
+                    "target": "High",
+                    "r13": "30 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "4",
+                    "ranking": "2",
+                    "name": "Peter Frank, MD",
+                    "best_time": "05:00 pm - 06:00 pm",
+                    "last_interaction": "",
+                    "target": "Medium",
+                    "r13": "15 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "4",
+                    "ranking": "3",
+                    "name": "Lilian Gill, PA",
+                    "best_time": "",
+                    "last_interaction": "3/12/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "2"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "1",
+                    "name": "Kelly Larry, MD",
+                    "best_time": "01:30 - 03:00 pm",
+                    "last_interaction": "5/28/13",
+                    "target": "High",
+                    "r13": "0 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "2",
+                    "name": "Priscilla Mun, MD",
+                    "best_time": "",
+                    "last_interaction": "5/27/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "3",
+                    "name": "William Herd, OD",
+                    "best_time": "",
+                    "last_interaction": "5/28/13",
+                    "target": "Low",
+                    "r13": "0 %",
+                    "my_rating": "2"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "4",
+                    "name": "Sara Conter, PA",
+                    "best_time": "11:20 - 11:55 am",
+                    "last_interaction": "5/24/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "5",
+                    "name": "Maria Deleper, PA",
+                    "best_time": "10:15 - 10:45 am",
+                    "last_interaction": "",
+                    "target": "Medium",
+                    "r13": "-60 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "6",
+                    "name": "Klarissa Denver, NP",
+                    "best_time": "",
+                    "last_interaction": "4/22/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "7",
+                    "name": "Sasha Rodgers, MD",
+                    "best_time": "",
+                    "last_interaction": "",
+                    "target": "Low",
+                    "r13": "-2.50 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "8",
+                    "ranking": "8",
+                    "name": "Ryan Wilson, MD",
+                    "best_time": "01:00 - 02:10 pm",
+                    "last_interaction": "5/28/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "0"
+                },
+                {
+                    "parent_ranking": "7",
+                    "ranking": "1",
+                    "name": "Harry Jensen, MD",
+                    "best_time": "01:30 - 03:00 pm",
+                    "last_interaction": "3/13/13",
+                    "target": "Low",
+                    "r13": "-13 %",
+                    "my_rating": "2"
+                },
+                {
+                    "parent_ranking": "7",
+                    "ranking": "2",
+                    "name": "Paula Schultz, OD",
+                    "best_time": "",
+                    "last_interaction": "3/14/13",
+                    "target": "Low",
+                    "r13": "-13.70 %",
+                    "my_rating": "1"
+                },
+                {
+                    "parent_ranking": "13",
+                    "ranking": "1",
+                    "name": "Jessie Hopkins, MD",
+                    "best_time": "02:30 - 03:00 pm",
+                    "last_interaction": "5/14/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "15",
+                    "ranking": "1",
+                    "name": "Lawrence Foote, MD",
+                    "best_time": "",
+                    "last_interaction": "4/1/13",
+                    "target": "Medium",
+                    "r13": "0 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "21",
+                    "ranking": "1",
+                    "name": "Cindy Kepler, MD",
+                    "best_time": "01:30 - 03:00 pm",
+                    "last_interaction": "4/1/13",
+                    "target": "High",
+                    "r13": "-27.3 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "16",
+                    "ranking": "1",
+                    "name": "Peter Clarker",
+                    "best_time": "11:15 am - 12:00 pm",
+                    "last_interaction": "3/4/13",
+                    "target": "High",
+                    "r13": "12.50 %",
+                    "my_rating": "4"
+                },
+                {
+                    "parent_ranking": "18",
+                    "ranking": "1",
+                    "name": "Amy A Hassan, MD",
+                    "best_time": "11:30 am - 01:00 pm",
+                    "last_interaction": "5/16/13",
+                    "target": "High",
+                    "r13": "-100 %",
+                    "my_rating": "5"
+                },
+                {
+                    "parent_ranking": "12",
+                    "ranking": "1",
+                    "name": "Druce Payne, MD",
+                    "best_time": "",
+                    "last_interaction": "5/13/13",
+                    "target": "High",
+                    "r13": "7.50 %",
+                    "my_rating": "3"
+                },
+                {
+                    "parent_ranking": "12",
+                    "ranking": "2",
+                    "name": "Nina Cubbert, PA",
+                    "best_time": "01:30 - 03:00 pm",
+                    "last_interaction": "3/15/13",
+                    "target": "Medium",
+                    "r13": "10 %",
+                    "my_rating": "4"
+                }
+            ];
+        </script>
+        <script type="text/javascript">
+            $(function(){
+				
+                // INSTANTIATE MIXITUP
+                $('#Parks').mixitup({
+                    layoutMode: 'list', // Start in list mode (display: block) by default
+                    listClass: 'list', // Container class for when in list mode
+                    gridClass: 'grid', // Container class for when in grid mode
+                    effects: ['fade','blur'], // List of effects 
+                    listEffects: ['fade','rotateX'], // List of effects ONLY for list mode
+                    //                    sortOnLoad: ['data-ranking', 'asc'],
+                    onMixStart: function(){
+                        $('.details').removeClass('active');                        
+                        $('div.prescriber_list_header').remove();
+                        $('li.prescriber').remove();
+                    },
+                    onMixEnd: function(){
+                        $('.list_header div').removeClass('active');
+                        
+                        var lis = [];
+                        $('li.mix_all').each(function() {
+                            if ($(this).css('opacity') == '1') {
+                                lis.push(this);
+                            }
+                        }); 
+                        
+                        $('div.result').text(lis.length + ' Accounts');
+                    }
+                });
+				
+                // HANDLE MULTI-DIMENSIONAL CHECKBOX FILTERING
+                /* 	
+                 *	The desired behaviour of multi-dimensional filtering can differ greatly 
+                 *	from project to project. MixItUp's built in filter button handlers are best
+                 *	suited to simple filter operations, so we will need to build our own handlers
+                 *	for this demo to achieve the precise behaviour we need.
+                 */
+				
+                var $filters = $('#Filters').find('li'),
+                dimensions = {
+                    target: 'all', // Create string for first dimension
+                    myrating: 'all'
+                };
+					
+                // Bind checkbox click handlers:
+                $filters.on('click',function(){
+                    var $t = $(this),
+                    dimension = $t.attr('data-dimension'),
+                    filter = $t.attr('data-filter'),
+                    filterString = dimensions[dimension];
+						
+                    if(filter == 'all'){
+                        // If "all"
+                        if(!$t.hasClass('active')){
+                            // if unchecked, check "all" and uncheck all other active filters
+                            $t.addClass('active').siblings().removeClass('active');
+                            // Replace entire string with "all"
+                            filterString = 'all';	
+                        } else {
+                            // Uncheck
+                            $t.removeClass('active');
+                            // Emtpy string
+                            filterString = '';
+                        }
+                    } else {
+                        // Else, uncheck "all"
+                        $t.siblings('[data-filter="all"]').removeClass('active');
+                        // Remove "all" from string
+                        filterString = filterString.replace('all','');
+                        if(!$t.hasClass('active')){
+                            // Check checkbox
+                            $t.addClass('active');
+                            // Append filter to string
+                            filterString = filterString == '' ? filter : filterString+' '+filter;
+                        } else {
+                            // Uncheck
+                            $t.removeClass('active');
+                            // Remove filter and preceeding space from string with RegEx
+                            var re = new RegExp('(\\s|^)'+filter);
+                            filterString = filterString.replace(re,'');
+                        };
+                    };
+					
+                    // Set demension with filterString
+                    dimensions[dimension] = filterString;
+					
+                    // We now have two strings containing the filter arguments for each dimension:	
+                    console.info('dimension 1: '+dimensions.target);
+                    console.info('dimension 2: '+dimensions.myrating);
+					
+                    /*
+                     *	We then send these strings to MixItUp using the filter method. We can send as
+                     *	many dimensions to MixitUp as we need using an array as the second argument
+                     *	of the "filter" method. Each dimension must be a space seperated string.
+                     *
+                     *	In this case, MixItUp will show elements using OR logic within each dimension and
+                     *	AND logic between dimensions. At least one dimension must pass for the element to show.
+                     */
+                    $('#Parks').mixitup('filter',[dimensions.target, dimensions.myrating])
+                });
+                
+                $('#Parks').on('click','.details', function(){
+                    var $btn = $(this),
+                    parent_ranking = $btn.attr('data-ranking');
+                    
+                    if(!$btn.hasClass('active')){
+                        
+                        $btn.addClass('active');
+                        
+                        var $newrow = $('<div class="prescriber_list_header" />');
+                        $newrow.attr('parent-ranking', parent_ranking);
+                        $newrow.append('<div class="meta indent"></div>');
+                        $newrow.append('<div class="meta ranking">#</div>');
+                        $newrow.append('<div class="meta namep">PRESCRIBER</div>');
+                        $newrow.append('<div class="meta besttime">BEST TIME</div>');
+                        $newrow.append('<div class="meta lastinteraction">LAST INTERACTION</div>');
+                        $newrow.append('<div class="meta targetp">TARGET</div>');
+                        $newrow.append('<div class="meta r13">R13</div>');
+                        $newrow.append('<div class="meta myrating">MY RATING</div>');
+                        $('li[data-ranking="' + parent_ranking + '"]').after($newrow);
+                        
+                        var j = 1;
+                        jQuery.each(PRESCRIBERS_DB, function() {				
+                            
+                            if(parent_ranking == this.parent_ranking){
+                                var $newrow = $('<li class="prescriber" />');
+                                    
+                                $newrow.attr('parent-ranking', parent_ranking);
+                                $newrow.attr('data-prescriber-ranking', j++);
+                                
+                                $newrow.append('<div class="meta indent"></div>');
+                                $newrow.append('<div class="meta ranking"><p>' + this.ranking + '</p></div>');
+                                $newrow.append('<div class="meta namep"><p>' + this.name + '</p></div>');
+                                $newrow.append('<div class="meta besttime"><p>' + this.best_time + '</p></div>');
+                                $newrow.append('<div class="meta lastinteraction"><p>' + this.last_interaction + '</p></div>');
+                                $newrow.append('<div class="meta targetp"><p>' + this.target + '</p></div>');
+                                    
+                                // Color the sales growth
+                                var $r13_cell = $('<div class="meta r13"><p>' + this.r13 + '</p></div>');
+                                if(this.r13.substring(0, this.r13.length-2) > 0){
+                                    $r13_cell.addClass("pos_growth");
+                                }
+                                else if(this.r13.substring(0, this.r13.length-2) < 0){
+                                    $r13_cell.addClass("neg_growth");
+                                }
+                                $newrow.append($r13_cell);
+						
+                                var $rate_str = "";
+                                for(var i=0; i<this.my_rating; i++){
+                                    $rate_str += "★";
+                                }
+                                if(this.myrating == 0){
+                                    $rate_str = "-";
+                                }
+						
+                                $newrow.append('<div class="meta myrating"><p>' + $rate_str + '</p></div>');
+                            
+                                if(j == 2)
+                                    $('div.prescriber_list_header[parent-ranking="' + parent_ranking + '"]').after($newrow);                          
+                                else if (j > 2){
+                                    //$('li.prescriber[parent-ranking="' + ranking + '"][data-ranking="1"]').after($newrow);
+                                    $('li.prescriber[parent-ranking="' + parent_ranking + '"]:last').after($newrow);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        $btn.removeClass('active');                        
+                        $('div.prescriber_list_header[parent-ranking="' + parent_ranking + '"]').remove();
+                        $('li.prescriber[parent-ranking="' + parent_ranking + '"]').remove();                        
+                    }
+                });
+                
+                $('#Parks').on('click','.list_header div', function(){
+                    var $sort = $(this),
+                    data_order = $sort.attr('data-order');
+                    
+                    if(data_order == "asc"){
+                        $sort.attr('data-order', "desc");
+                        $sort.removeClass('active');
+                        
+                        $('.list_header div').removeClass('sorted');
+                        $('.list_header div span').remove();
+                        $sort.addClass('sorted');
+                        $sort.append('<span class="asc"></span>');
+                    } else if(data_order == "desc"){
+                        $sort.attr('data-order', "asc");
+                        $sort.removeClass('active');
+                        
+                        $('.list_header div').removeClass('sorted');
+                        $('.list_header div span').remove();
+                        $sort.addClass('sorted');
+                        $sort.append('<span class="desc"></span>');
+                    }
+                });
+            
+                $('.button.refresh').on('click', function(){
+                    location.reload(true); 
+                });
+            
+                $("#glossary_modal").dialog({
+                    autoOpen: false,
+                    height: 540,
+                    width: 730,
+                    modal: true
+                });
+        
+                $('.glossary').on('click', function(){
+                    $("#glossary_modal").html('<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>PTP</td><td>Sales PTP</td></tr></tbody></table>');
+                    
+                    $("#glossary_modal").dialog("open");
+                });
+            });
+        </script>
+
+        <title>Genee - Get Account Suggestions</title>
+        <style type="text/css"></style></head>
+    <body>
+        <section>
+
+            <!-- BEGIN DEMO WRAPPER -->
+
+            <div class="wrapper wf">
+
+                <!-- BEGIN HEADER -->
+
+                <header>
+                    <div class="group">
+                        <a href="index.html">
+                            <div class="back">
+                                <div class="img_wrapper loaded previous">
+                                    <img src="image/previous.png">
+                                </div>Main Menu 
+                            </div>
+                        </a>
+                        <div class="button listview active" id="ToList">
+                            <div class="img_wrapper loaded listview">
+                                <img src="image/listview_active.png">
+                            </div>
+                            Table View
+                        </div>
+                        <a href="mapview.html">
+                            <div class="button mapview" id="ToGrid">
+                                <div class="img_wrapper loaded mapview">
+                                    <img src="image/mapview.png">
+                                </div>
+                                Map View
+                            </div>
+                        </a>                        
+                        <div class="glossary">
+                            <a href="#">
+                                Glossary
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- END HEADER -->
+
+                <!-- BEGIN CONTROLS -->
+
+                <nav class="controls just">
+                    <div class="result">21 Accounts</div>
+                    <div class="group" id="Filters">
+                        <div class="drop_down wf">
+                            <span class="anim150">Drug</span>
+                            <ul class="anim250">
+                                <li class="active">Avastin</li>
+                                <li>Herceptin</li>
+                            </ul>
+                        </div>
+                        <div class="drop_down wf">
+                            <span class="anim150">Target</span>
+                            <ul class="anim250">
+                                <li class="active" data-filter="all" data-dimension="target">All</li>
+                                <li data-filter="high" data-dimension="target">High</li>
+                                <li data-filter="medium" data-dimension="target">Medium</li>
+                                <li data-filter="low" data-dimension="target">Low</li>
+                            </ul>
+                        </div>
+                        <div class="drop_down wf">
+                            <span class="anim150">My Rating</span>
+                            <ul class="anim250">
+                                <li class="active" data-filter="all" data-dimension="myrating">All</li>
+                                <li data-filter="1star" data-dimension="myrating">★</li>
+                                <li data-filter="2star" data-dimension="myrating">★★</li>
+                                <li data-filter="3star" data-dimension="myrating">★★★</li>
+                                <li data-filter="4star" data-dimension="myrating">★★★★</li>
+                                <li data-filter="5star" data-dimension="myrating">★★★★★</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="button refresh">Refresh</div>
+                </nav>
+
+                <!-- END CONTROLS -->
+
+                <!-- BEGIN PARKS -->
+
+                <ul id="Parks" class="just list">
+
+                    <!-- "TABLE" HEADER CONTAINING SORT BUTTONS (HIDDEN IN GRID MODE)-->
+
+                    <div class="list_header">
+                        <div class="sort meta ranking sorted" data-sort="data-ranking" data-order="asc">#
+                            <span class="desc"></span>
+                        </div>
+                        <div class="sort arrow meta name" id="SortByName" data-sort="data-name" data-order="desc">
+                            ACCOUNT NAME
+                        </div>
+                        <div class="sort meta drivingt" data-sort="data-drivet" data-order="desc">
+                            DRIVE
+                        </div>
+                        <div class="sort meta hcps" data-sort="data-prescribers" data-order="desc">
+                            HCPs
+                        </div>
+                        <div class="meta target" id="SortByTarget">TARGET</div>
+                        <div class="sort meta ptp" data-sort="data-ptp" data-order="desc">
+                            PTP
+                        </div>
+                        <div class="sort meta r13" data-sort="data-r13" data-order="desc">
+                            R13
+                        </div>
+                        <div class="sort meta myrating" data-sort="data-myrating" data-order="desc">
+                            MY RATING
+                        </div>
+                    </div>
+
+
+                    <!-- FAIL ELEMENT -->
+
+                    <div class="fail_element anim250">Sorry — we could not find any accounts matching these criteria</div>
+
+                    <!-- BEGIN LIST OF PARKS (MANY OF THESE ELEMENTS ARE VISIBLE ONLY IN LIST MODE)-->
+                    <script>									
+                        jQuery.each(ACCOUNTS_DB, function() {
+                            // Sorting is done by data-attributes
+                            var $newrow = $('<li class="mix" />');
+                            $newrow.attr({
+                                'data-name': this.practice, 
+                                'data-ranking': this.ranking,
+                                'data-ptp': this.ptp,
+                                'data-r13': this.r13,
+                                'data-myrating': this.myrating,
+                                'data-prescribers': this.num_prescribers,
+                                'data-drivet': this.drivingtime,
+                                'data-style': "display: block; opacity: 1;"
+                            });
+ 						
+                            // Filters are done by css class
+                            if(this.num_high > 0){
+                                $newrow.addClass("high");
+                            } 
+                            if(this.num_med > 0){
+                                $newrow.addClass("medium");
+                            }
+                            if(this.num_low > 0){
+                                $newrow.addClass("low");
+                            }
+                            $newrow.addClass(this.myrating + "star");
+						
+                            $newrow.addClass("mix_all");
+						
+                            // Render each row
+                            $newrow.append('<div class="meta ranking"><p>' + this.ranking + '</p></div>');
+                            $newrow.append('<div class="meta name"><div class="titles"><h2>' + this.practice + '</h2><div class="img_wrapper loaded pin"><img src="image/Pin.png"></div><ul><li>' + this.address1 + '</li><li>' + this.address2 + ' ' + this.zipcode + '</li><li>(713) 792-2121</li></ul></div></div>');
+                            $newrow.append('<div class="meta drivingt"><p>' + this.drivingtime + ' mins</p></div>');
+                            $newrow.append('<div class="meta hcps"><ul><li><b>' + this.num_prescribers + '</b> Prescribers</li><li>' + this.num_nurses + ' Nurses</li></ul><div class="button details" data-ranking="' + this.ranking + '" data-name="' + this.practice + '">See List</div></div>');
+                            $newrow.append('<div class="meta target"><ul><li>' + this.num_high + ' High</li><li>' + this.num_med + ' Medium</li><li>' + this.num_low + ' Low</li></ul>');
+                            $newrow.append('<div class="meta ptp"><p>' + this.ptp + '</p></div>');
+                            //                            <div class="img_wrapper loaded reptrax"><img src="image/reptrax.png"></div>
+                            // Color the sales growth
+                            var $r13_cell = $('<div class="meta r13"><p>' + this.r13 + '</p></div>');
+                            if(this.r13.substring(0, this.r13.length-2) > 0){
+                                $r13_cell.addClass("pos_growth");
+                            }
+                            else if(this.r13.substring(0, this.r13.length-2) < 0){
+                                $r13_cell.addClass("neg_growth");
+                            }
+                            $newrow.append($r13_cell);
+						
+                            var $rate_str = "";
+                            for(var i=0; i<this.myrating; i++){
+                                $rate_str += "★";
+                            }
+                            if(this.myrating == 0){
+                                $rate_str = "-";
+                            }
+						
+                            $newrow.append('<div class="meta myrating"><p>' + $rate_str + '</p></div>');
+                            $('#Parks').append($newrow);
+                        });
+                    </script>
+
+                    <!-- END LIST OF PARKS -->	
+                </ul>
+            </div>
+
+            <!-- END DEMO WRAPPER -->
+
+        </section>
+        <div id="glossary_modal" title="Glossary">
+
+        </div>
+        <!-- BEGIN FOOTER -->
+        <!--Powered by <strong>MixItUp</strong>, a <a href="http://mixitup.io/demos/parks#">Barrel Tool</a>-->
+        <!-- END FOOTER -->
+
+    </body>
+</html>

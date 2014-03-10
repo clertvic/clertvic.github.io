@@ -1,0 +1,274 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    font-family: 'Source Sans Pro', 'Myriad', sans-serif;
+    font-size: 16px;
+    font-size:100%;
+    color: #000;
+}
+h2,p{
+    font-weight:normal;
+}
+ul,li{
+    list-style:none;
+}
+ul{
+    overflow:hidden;
+    padding:0;
+}
+ul li{
+    margin:5px;
+    float:left;
+    display:block;
+    height:30px;
+    width:60px;
+    padding:5px;
+}
+ul li a{
+    text-decoration:none;
+    color:#000;
+}
+ul li p{
+    font-family: “Myriad Pro”, Myriad, Helvetica, Tahoma, sans-serif;
+    font-size:12px;
+}
+ol{text-align:center;}
+ol li{display:inline;padding-right:1em;}
+ol li a{color:#fff;}
+
+.ui-widget-overlay {
+    background: #000;
+    opacity: 0.70;
+}
+
+/* Header */
+header{
+    height: 50px;
+    width: 100%;
+    padding: 5px 15px;
+    background: #f4f4f4;
+    color: #3ba4ff;
+    font-weight: 400;
+    line-height: 10px;
+    border-bottom: 2px solid #d7d7d7;
+}
+
+.back {
+    position: absolute;
+    font-size: 24px;
+    line-height: 52px;
+}
+
+/* Notes */
+
+#stats th {
+    color: #3aa4ff;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#stats tr td {
+    font-size: 24px;
+    font-weight: 200;
+    width: 70px;
+    text-align: center;
+}
+
+#stats .targets {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#stats .high_super {
+    position: relative;
+    top: -8px;
+}
+
+#stats .med_floating {
+    position: relative;
+    top: -4px;
+}
+
+#acc_table {
+    width: 100%;
+}
+#acc_table td.cell_top {
+    padding: 10px;
+}
+
+#notes_body {
+    background: #e2e2e2;
+}
+
+#acc_header {
+    font-size: 18px;
+    font-weight: 300;
+    background: #fff;
+}
+
+.n_category {
+    border-top: 2px solid #ddf1f7;
+    padding: 10px;
+    padding-left: 50px;
+    white-space: nowrap;
+    overflow: scroll;
+}
+
+h1{
+    color: #3aa4ff;
+    background: #fff;
+    font-family: "Source Sans Pro";
+    font-weight: bold;
+    font-size: 20px;
+    padding: 0 5px;
+}
+
+h2{
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    padding-left: 8px;
+}
+
+.n_cluster {
+    white-space: normal;
+    width: 300px;
+    display: inline-block;
+}
+
+.n_note {
+    -webkit-box-shadow: 1px 1px 0px #777;
+}
+
+.n_yellow{
+    background:#fcf7b4;
+}
+
+.n_blue {
+    background: #99ffff;
+}
+
+.n_green {
+    background: #c0f9dd;
+}
+
+.n_pink {
+    background: #fcd0d6;
+}
+
+.n_addnote {
+    height: 26px;
+    width: 58px;
+    border: 2px dashed #888888;
+    vertical-align: center;
+}
+
+.n_addnote p {
+    text-align: center;
+    position: relative;
+    color: #888888;
+    font-size: 20px;
+}
+
+#zoomed-in-group {
+    background: #e2e2e2;
+}
+
+#zoomed-in-group .n_note{
+    text-decoration: none;
+    color: #000;
+    display: block;
+    height: 110px;
+    width: 180px;
+    padding: 10px;
+    margin: 15px;
+    -webkit-box-shadow: 4px 4px 0px #777;
+}
+
+#zoomed-in-group .n_addnote {
+    height: 110px;
+    width: 175px;
+    padding: 10px;
+    vertical-align: center;
+    border: 4px dashed #ffffff;
+}
+
+#zoomed-in-group .n_addnote p {
+    text-align: center;
+    position: relative;
+    top: 14px;
+    color: #fff;
+    font-size: 60px;
+}
+
+.group{
+    display: inline-block;
+    line-height: 48px;
+}
+
+.back{
+    position: absolute;
+    font-size: 24px;
+    line-height: 52px;
+}
+
+.img_wrapper.previous{
+    display: inline-block;
+    width: 18px;
+    height: 30px;
+    vertical-align: top;
+    margin-top: 6px;
+    margin-right: 6px;
+}
+
+.glossary{
+    font-size: 24px;
+    line-height: 52px;
+    margin-left: 282px;
+    display: inline-block;
+}
+
+.img_wrapper{
+    position: relative;
+    /*background: #ddf1f7;*/
+    overflow: hidden;
+}
+
+.img_wrapper img{
+    /*position: absolute;*/
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    top: 0;
+
+    -webkit-transition: opacity 150ms;
+    -moz-transition: opacity 150ms;
+    -ms-transition: opacity 150ms;
+    transition: opacity 150ms;
+}
+
+.img_wrapper.loaded img{
+    opacity: 1;
+}
+
+header a{
+    color: #3ba4ff;
+}
+
+a{
+    text-decoration: none;
+}
+
+#glossary_modal table{
+    width: 100%;
+}
+
+.account{
+    font-size: 30px;
+    line-height: 52px;
+    margin-left: 395px;
+    display: inline-block;
+    color: #000;
+}
