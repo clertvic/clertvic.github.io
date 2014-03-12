@@ -558,6 +558,21 @@ div.slide{
     /*color: #808080;*/
 }
 
+#ProsCons{
+	width: 46%;
+	list-style: disc outside;
+	padding: 0 4% 5px 0;
+	margin-bottom: 40px;
+}
+
+#ProsCons li{
+    margin-bottom: 8px;
+
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
 
 /* BUTTONS */
 
