@@ -1,0 +1,185 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Cache-Control" content="no-cache" />
+        <title>CHAIYAWUT – Interaction Design Exercise</title>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+        
+        <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="init.js?=ver1.1"></script>
+    </head>
+    <body>
+
+        <!-- BEGIN SINGLE WORK -->
+
+        <div class="container">
+            <section class="cover work">
+                <div class="slide" style="background-image: url(images/google_hero.jpg); opacity: 1; -webkit-transition: opacity 1000ms ease-in-out; transition: opacity 1000ms ease-in-out;"></div>
+            </section>
+            <section class ="page">
+                <div class="wrapper">
+                    <h2>Interaction Design Exercise</h2>
+                    <h3>Lost in the Crowd</h3>
+                    <div class="hr"></div>
+                    <p>During a crisis, many people turn immediately to their mobile devices for assistance and information. One such situation occurs when parents lose track of a young child at a crowded theme park. Assume an application about that park would be installed on devices of a large number of guests and workers. Design a feature of that application that could help quickly reunite parents with their children, without requiring their children to wear or carry a device.
+                    </p>
+                    <div class="hr"></div>
+                    <div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_research.jpg" alt="google_research"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+						<h4>Exploratory Research</h4>
+						<p>I began the research process by defining tasks and critical information parents would need to quickly find a missing child. To understand the situation better from experts’ point of view, I looked at online resources dedicated to how to take action when a child has gone missing at an amusement park. I also spoke with a father of three children and identified opportunities where a mobile app would be able to facilitate the search effort.</p>
+						<p>From this research I found that:<ul class="research"><li>When parents panic, they seek help from park personnel.</li><li>A picture and complete description will make it much easier to find a lost child.</li><li>Any mobile feature has to be simple and offer basic guidance on providing information as parents can't stay focused, especially in a moment of panic.</li></ul>
+						</p>
+                    </div>
+                    <div class="hr clearfix"></div>
+                    <div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_sketch1.jpg" alt="google_sketch1"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+						<h4>Sketches</h4>
+						<p>Based on the key insights from the research, I started exploring different ideas through sketches. Drawing helped me develop necessary functionality, structure the flow, and uncover information needs.</p>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_sketch2.jpg" alt="google_sketch2"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+                    </div>
+                    <div class="clearfix"></div>
+					<div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_sketch3.jpg" alt="google_sketch3"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+                    </div>
+                    <div class="clearfix"></div>
+					<div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_sketch4.jpg" alt="google_sketch4"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+						<p>As my ideas became more tangible, I created another sketch with more structured flows to gain a better understanding of the entire process and possible actions.</p>
+                    </div>
+                    <div class="clearfix"></div>
+					<div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_sketch5.jpg" alt="google_sketch5"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+                    </div>
+                    <div class="clearfix"></div>
+					<div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_sketch6.jpg" alt="google_sketch6"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+                    </div>
+                    <div class="hr clearfix"></div>
+                    <div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_wireframe1.png" alt="google_wireframe1"/>
+                            <img src="images/google_wireframe2.png" alt="google_wireframe2"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+						<h4>Low-Fidelity Overview</h4>
+						<p>I developed two wireframes to help describe my design solution. The first wireframe illustrates the flow and functionality for parents while the second one shows the flow and key pages for others.</p>
+						<p>Below are the identified goals and explanations of how the <i>Find My Child</i> feature of the app could help quickly reunite parents with their children.</p>
+						<ul class="low-fi">
+						<li>Quickly and easily report a missing child: <span>There are only four required fields in which parents have to fill out on the <i>Description Form</i> page. Each field provides basic guidance on what information is needed. This is very helpful, especially when parents panic and can’t stay focused. I used one large text field for a child’s description instead of several fields for each piece of information. Since every child is unique, this will allow parents to quickly enter specific description about their child such as autistic or medical condition. The name and phone number of the parent are automatically filled (assuming that users were already asked to enter this information before using the app).</span></li>
+						<li>Widely disseminate information: <span>Other guests, park employees, and security officers will be immediately notified through the app as soon as the incident has been reported. In addition, an SMS alert will be sent to all park employees and security officers to ensure that those without the app installed also know about the incident.</span></li>
+						<li>Easy to share leads: <span>The <i>Leads</i> page allows others to easily share leads with the parent and vice versa. Leads could be messages, pictures, or locations. This page also provides the parent with opportunities to ask questions and get useful information from others.</span>
+						</li>
+						<li>Filter down the most significant leads: <span> Tap the star icon below the check icon on the <i>Leads</i> page to quickly reach important pieces of information. To mark a lead as significant, tap the star icon at the top-right corner of the lead.
+						</li>
+						<li>Easy to contact the parent: <span>Anyone can call the parent directly by tapping the Call button or phone icon, which can be found on every page.</span>
+						</li>
+						</ul>
+                    </div>
+                    <div class="hr clearfix"></div>
+                    <div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_mockup.jpg" alt="google_mockup"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+						<h4>High-Fidelity Mockup</h4>
+						<p>I chose to create a high-fidelity mockup for the <i>Description</i> page because it’s the key information page for every user.</p> <p>Every piece of information has been carefully laid out to ensure that people can quickly learn about the incident in a friendly and logical manner. Details such as font properties, colors, and icons, play a crucial role in making important information more prominently.</p>
+                    </div>
+                    <div class="hr clearfix"></div>
+                    <div class="col_75 left">
+                         <figure>
+                        <div class="img_wrapper">
+                            <img src="images/google_flaw.jpg" alt="google_flaw"/>
+                        </div>
+                    </figure>
+                    </div>
+                    <div class="col_25 right">
+						<h4>Flaws</h4>
+						<p>As I reviewed my design solution before submitting, I was able to identify things that could be better:<ul class="flaws"><li>When a parent reports an incident, the app should display a message letting them know that the case has been sent to other guests, park employees and security officers. It will help them know that they’re getting help and ease their anxiety.</li><li>
+The app should have a pre-installed park map and list of emergency phone numbers. This is especially helpful when there is no internet connection.</li></ul></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- END SINGLE WORK -->
+        
+        <!-- BEGIN FOOTER -->
+
+        <footer>
+            <div class="wrapper">
+                <div class="hr"></div>
+                <p class="copyright">Chaiyawut Lertvichaivoravit</p>
+            </div>
+        </footer>
+
+        <!-- END FOOTER -->
+
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-37425075-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
+    </body>
+</html>
